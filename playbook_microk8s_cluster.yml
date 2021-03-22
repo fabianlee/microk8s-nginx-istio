@@ -1,0 +1,11 @@
+---
+
+- hosts: microk8s_HA
+  gather_facts: yes
+  become: yes
+
+  vars:
+    microk8s_enabled_HA: true
+
+  roles:
+    - role: ansible-role-microk8s

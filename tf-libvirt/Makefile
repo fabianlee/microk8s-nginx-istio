@@ -1,0 +1,31 @@
+THISDIR := $(notdir $(CURDIR))
+PROJECT := $(THISDIR)
+TF := terraform14
+
+init: create-keypair
+	# skips init if .terraform directory already exists
+	[ -d .$(TF) ] || $(TF) init
+
+apply: init 
+	$(TF) apply -auto-approve
+	$(TF) output
+
+destroy:
+	$(TF) destroy -force -auto-approve
+	./clean-known-hosts.sh
+	#rm terraform.tfstate*
+
+## create public/private keypair for ssh
+create-keypair:
+	# skips if file already exists
+	[ -f id_rsa ] || ssh-keygen -t rsa -b 4096 -f id_rsa -C $(PROJECT) -N "" -q
+
+refresh:
+	$(TF)refresh && $(TF)output
+
+libvirt-pool:
+	$(eval POOLDIR=$(shell virsh pool-dumpxml default | grep -E "<path>.*</path>" | grep -Po "(?<=\>)[^<]+"))
+
+## validate syntax of cloud_init
+validate-cloud-config:
+	cloud-init devel schema --config-file cloud_init.cfg

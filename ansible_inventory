@@ -1,0 +1,18 @@
+# aliases
+microk8s-1 ansible_host=192.168.122.210
+microk8s-2 ansible_host=192.168.122.211
+microk8s-3 ansible_host=192.168.122.212
+
+# for single host deployment
+[microk8s]
+microk8s-1
+
+# for k8s cluster deployment
+[microk8s_HA]
+microk8s-1
+microk8s-2
+microk8s-3
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file = tf-libvirt/id_rsa

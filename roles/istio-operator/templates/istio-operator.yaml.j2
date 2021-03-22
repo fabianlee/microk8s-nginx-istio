@@ -1,0 +1,24 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: istio-system
+---
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: istio-control-plane
+  namespace: istio-system
+
+spec:
+  profile: default
+  revision: {{ istio_version | replace('.','-') }}
+
+  addonComponents:
+    kiali:
+      enabled: true
+    grafana:
+      enabled: true
+    prometheus:
+      enabled: true
+
