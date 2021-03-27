@@ -41,7 +41,7 @@
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
 
-- name: get k8s dashboard token from remote system
+- name: get k8s dashboard token
   slurp: src="{{TMPDIR}}/k8s-token.txt"
   register: dashboard_token
 - debug: msg="{{dashboard_token.content}}"
@@ -50,17 +50,15 @@
   set_fact:
     dashboard_token_fact: "{{ dashboard_token.content }}"
 
-# going to use template to write instead (more flexible)
-#- name: put dashboard token on calling system
-#  delegate_to: localhost
-#  shell: "echo {{dashboard_token_fact}} > /tmp/k8s-token.txt"
-
-- name: create dashboard token from template on calling system
-  delegate_to: localhost
+- name: create dashboard token file
   template:
     src: k8s-dashboard-token.txt.j2
     dest: "{{TMPDIR}}/k8s-dashboard-token.txt"
     mode: '0666'
+- name: slurp dashboard token back to calling host
+  fetch:
+    src: "{{TMPDIR}}/k8s-dashboard-token.txt"
+    dest: "{{TMPDIR}}/k8s-dashboard-token.txt"
+    flat: yes
 - debug: 
     msg: "kubernetes dashboard token written to: {{TMPDIR}}/k8s-dashboard-token.txt"
-

@@ -1,0 +1,13 @@
+---
+
+- name: create kubectl config
+  become: yes
+  changed_when: true
+  shell: microk8s config > /tmp/microk8s-kubeconfig
+
+- name: copy kubectl back to calling host
+  fetch:
+    src: /tmp/microk8s-kubeconfig
+    dest: /tmp/microk8s-kubeconfig
+    flat: yes
+

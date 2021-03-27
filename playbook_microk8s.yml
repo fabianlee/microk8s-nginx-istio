@@ -17,6 +17,7 @@
   roles:
     # https://github.com/istvano/ansible_role_microk8s.git
     #- role: ansible_role_microk8s
+    #- role: microk8s-get-kubeconfig
     #- role: k9s
-    #- role: istio-operator
     - role: kubernetes-dashboard
+    #- role: istio-operator
