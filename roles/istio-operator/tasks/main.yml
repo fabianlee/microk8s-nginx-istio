@@ -17,26 +17,26 @@
 
 - name: istio release exists
   stat:
-    path: "{{istio_dir}}/istio-{{istio_version}}"
+    path: "{{TMPDIR}}/istio-{{istio_version}}"
   register: istio_exists
 
 - name: download and install istio package
   shell: "curl -L https://istio.io/downloadIstio | ISTIO_VERSION={{istio_version}} TARGET_ARCH=x86_64 sh -"
   args:
-    chdir: "{{istio_dir}}"
+    chdir: "{{TMPDIR}}"
     warn: false
   when: not istio_exists.stat.exists
 
 - name: istio precheck
   become: yes
-  command: "{{istio_dir}}/istio-{{istio_version}}/bin/istioctl experimental precheck"
+  command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl experimental precheck"
   args:
     creates: istio-precheck.done
   register: precheck
 - debug: msg="{{precheck.stdout_lines}}"
 
 - name: istio operator init
-  command: "{{istio_dir}}/istio-{{istio_version}}/bin/istioctl operator init --revision {{ istio_version | replace('.','-') }}"
+  command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl operator init --revision {{ istio_version | replace('.','-') }}"
   args: 
     creates: istio-operator-init.done
   register: stdout
@@ -57,11 +57,11 @@
 - name: create istio operator config
   template:
     src: istio-operator.yaml.j2
-    dest: "{{istio_dir}}/istio-operator.yaml"
+    dest: "{{TMPDIR}}/istio-operator.yaml"
     mode: '0666'
 
 - name: apply isto operator config
-  shell: "kubectl apply -f {{istio_dir}}/istio-operator.yaml"
+  shell: "kubectl apply -f {{TMPDIR}}/istio-operator.yaml"
   become: yes
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
@@ -109,4 +109,19 @@
 - command: "kubectl get namespace -L istio.io/rev"
   become: yes
   register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+
+
+- name: create istio mtls config
+  template:
+    src: istio-peerauth.yaml.j2
+    dest: "{{TMPDIR}}/istio-peerauth.yaml"
+    mode: '0666'
+- name: apply mutual TLS policy, may need to wait for pods to settle
+  command: "kubectl apply -f {{ istio_dir }}/istio-peerauth.yaml"
+  become: yes
+  register: stdout
+  retries: 10
+  delay: 60
+  until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"

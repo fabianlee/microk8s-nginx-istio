@@ -1,4 +1,5 @@
 ---
+# ansible-playbook playbook_microk8s.yml
 
 - hosts: microk8s
   gather_facts: yes
@@ -17,4 +18,5 @@
     # https://github.com/istvano/ansible_role_microk8s.git
     #- role: ansible_role_microk8s
     #- role: k9s
-    - role: istio-operator
+    #- role: istio-operator
+    - role: kubernetes-dashboard
