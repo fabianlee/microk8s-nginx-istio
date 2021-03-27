@@ -1,4 +1,15 @@
-Working with the istio operator installed on microk8s
+microk8s installation and post-configuration
+
+Using this ansible role for main installation:
+https://github.com/istvano/ansible_role_microk8s.git
+
+And then additional roles for:
+  * k9s admin
+  * getting kubeconfig to localhost
+  * getting token for kubernetes dashboard
+  * istio-operator installation
+
+
 
 instead of port forwarding, you can route all traffic to internal 10.152.183.0/24 directly to the VM
 
