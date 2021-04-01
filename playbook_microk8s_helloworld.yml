@@ -1,0 +1,12 @@
+---
+# ansible-playbook playbook_microk8s_helloworld.yml -t apply|delete
+
+- hosts: microk8s
+  gather_facts: yes
+  become: yes
+
+  vars:
+    #foo: bar
+
+  roles:
+    - role: istio-helloworld
