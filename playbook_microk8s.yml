@@ -14,12 +14,13 @@
     # not a cluster
     microk8s_enabled_HA: false
     # configure this user's group, permissions, ~/.kube/config
-    users: ['ubuntu']
+    users: ['fabian']
 
   roles:
-    # https://github.com/istvano/ansible_role_microk8s.git
-    - role: ansible_role_microk8s
-    - role: microk8s-get-kubeconfig
-    - role: k9s
+    #- role: ansible_role_microk8s
+    #- role: microk8s-get-kubeconfig
+    #- role: k9s
+    #- role: kubectl-proxy
     #- role: kubernetes-dashboard
     #- role: istio-operator
+    - role: istio-helloworld

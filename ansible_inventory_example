@@ -10,8 +10,8 @@ microk8s-1
 # for k8s cluster deployment
 [microk8s_HA]
 microk8s-1
-microk8s-2
-microk8s-3
+#microk8s-2
+#microk8s-3
 
 [all:vars]
 #ansible_user=ubuntu

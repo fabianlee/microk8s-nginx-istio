@@ -1,0 +1,19 @@
+---
+
+- name: open 8001 port for proxy
+  ufw: rule=allow port=8001 proto=tcp
+
+- name: check if kubectl proxy port 8001 already listening
+  shell: ss -tp state listening sport = :8001 | grep kubectl
+  register: proxy_already_listening
+  failed_when: not proxy_already_listening.rc in [0,1]
+- debug:
+    msg: "0=already listening,1=not listening; actual result={{proxy_already_listening.rc}}"
+
+- name: run kubectl proxy on port 8001
+  shell: nohup kubectl proxy --accept-hosts=.* --address=0.0.0.0 &
+  when: proxy_already_listening.rc != 0
+
+- debug:
+    msg: "kubectl proxy listening, try: 'http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/'"
+

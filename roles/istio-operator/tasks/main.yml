@@ -27,6 +27,15 @@
     warn: false
   when: not istio_exists.stat.exists
 
+- name: change permissions to all files for istio download
+  file:
+    state: directory
+    path: "{{TMPDIR}}/istio-{{istio_version}}"
+    recurse: yes
+    # directories to 644, files to 755
+    mode: u=rwX,g=rX,o=rX
+    #mode: o+rwx
+
 - name: istio precheck
   become: yes
   command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl experimental precheck"
@@ -42,7 +51,7 @@
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
 
-- name: check istio-operatoer namespace for objects 
+- name: check istio-operator namespace for objects 
   command: kubectl get all -n istio-operator
   become: yes
   register: stdout
