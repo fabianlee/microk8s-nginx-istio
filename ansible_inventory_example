@@ -1,5 +1,5 @@
 # aliases
-microk8s-1 ansible_host=192.168.122.210
+microk8s-1 ansible_host=10.0.2.15
 microk8s-2 ansible_host=192.168.122.211
 microk8s-3 ansible_host=192.168.122.212
 
@@ -14,5 +14,6 @@ microk8s-2
 microk8s-3
 
 [all:vars]
-ansible_user=ubuntu
-ansible_ssh_private_key_file = tf-libvirt/id_rsa
+#ansible_user=ubuntu
+#ansible_ssh_pass=*****
+#ansible_ssh_private_key_file = tf-libvirt/id_rsa
