@@ -3,9 +3,9 @@
 # Test istion ingress gateway and certs
 #
 
-if [ "$#" -lt 4 ]; then
-  echo "Usage: gatewayip-ext fqdn1,fqdn2 gatewayip-int fqdn"
-  echo "Example: 10.152.183.138 microk8s-1,microk8s-tertiary 10.152.183.95 microk8s-secondary"
+if [ "$#" -lt 2 ]; then
+  echo "Usage: gatewayip-ext fqdn1,fqdn2 [gatewayip-int fqdn]"
+  echo "Example: 10.152.183.138 microk8s-1.local,microk8s-alt.local 10.152.183.39 microk8s-secondary.local"
   exit 1
 fi
 gwextip="$1"
@@ -31,6 +31,15 @@ function call_curl() {
   fi
   if [[ -z $expectSuccess ]]; then
     expectSuccess=0
+  fi
+
+  echo "[ $protocol://$domain:$port/page ]"
+
+  if [[ $port -eq 443 ]]; then
+    echo | openssl s_client -verify_return_error -servername $domain -connect $gateway:$port -showcerts > /dev/null 2>&1
+    certOK=$?
+    [ $certOK -eq 0 ] || { echo "ERROR: cert error going to $gateway:$port domain $domain"; exit 3; }
+    echo | openssl s_client -verify_return_error -servername $domain -connect $gateway:$port -showcerts 2>/dev/null | grep -E "subject=|issuer="
   fi
 
   #set -x
@@ -62,12 +71,13 @@ for domain in $gwextfqdnlist ; do
   echo ""; echo "";
   echo "***Correct Host header $domain to external $gwextip**********************************************"
   call_curl $gwextip $domain http "hello" 80 0
-  echo | openssl s_client -verify_return_error -servername $domain -connect $gwextip:443 -showcerts > /dev/null 2>&1
-  certOK=$?
-  [ $certOK -eq 0 ] || { echo "ERROR: cert error going to $gwextip:443 domain $domain"; exit 3; }
   call_curl $gwextip $domain https "hello" 443 0
 done
 
+# if argument 3 and 4 not provided, then exit normally
+if [ "$#" -lt 4 ]; then
+  exit 0
+fi
 
 echo ""; echo "";
 domain=$gwintfqdn
