@@ -33,15 +33,6 @@ spec:
           hpaSpec:
             minReplicas: 1
             maxReplicas: 1
-
-#          overlays:
-#            - kind: Service
-#              name: istio-ingressgateway
-#              patches:
-#                - path: spec.loadBalancerIP
-#                  value: 10.152.183.213
-#                - path: spec.loadBalancerSourceRanges
-#                  value: [ 10.0.0.0/8 ]
             
           service:
             ports:
@@ -55,7 +46,7 @@ spec:
               protocol: TCP
               targetPort: 8080
             - name: https
-              nodePort: 32601
+              nodePort: {{istio_ingressgateway_nodeport}}
               port: 443
               protocol: TCP
               targetPort: 8443
@@ -68,21 +59,69 @@ spec:
               protocol: TCP
               targetPort: 15443
 
-      # second ingress for internal management traffic
+#          overlays:
+#            - kind: Service
+#              name: istio-ingressgateway
+#              patches:
+#                - path: spec.loadBalancerIP
+#                  value: 10.152.183.213
+#                - path: spec.loadBalancerSourceRanges
+#                  value: [ 10.0.0.0/8 ]
+
+
+      # secondary, independent ingress
       - namespace: istio-system
-        name: istio-ingressgateway-mgmt
+        name: {{istio_ingressgateway_secondary_name}}
         enabled: true
         k8s:
           hpaSpec:
             minReplicas: 1
             maxReplicas: 1
+            scaleTargetRef:
+              apiVersion: apps/v1
+              kind: Deployment
+              name: {{istio_ingressgateway_secondary_name}}
 
+          # these overlayed values are necessary to create an independent ingressgateway
+          # if they are not provided explicitly, you end up with crossover
+          # the other way to get an independent secondary ingress is to use helm
           overlays:
-            - kind: Service
-              name: istio-ingressgateway-mgmt
+            - kind: HorizontalPodAutoscaler
+              name: {{istio_ingressgateway_secondary_name}}
               patches:
+                - path: metadata.labels.app
+                  value: {{istio_ingressgateway_secondary_name}}
                 - path: metadata.labels.istio
-                  value: istio-ingressgateway-mgmt
+                  value: {{istio_ingressgateway_secondary_selector}}
+                - path: spec.scaleTargetRef.name
+                  value: {{istio_ingressgateway_secondary_name}}
+            - kind: Deployment
+              name: {{istio_ingressgateway_secondary_name}}
+              patches:
+                - path: metadata.labels.app
+                  value: {{istio_ingressgateway_secondary_name}}
+                - path: metadata.labels.istio
+                  value: istio_ingressgateway_secondary_selector
+                - path: spec.selector.matchLabels.app
+                  value: {{istio_ingressgateway_secondary_name}}
+                - path: spec.selector.matchLabels.istio
+                  value: istio_ingressgateway_secondary_selector
+                - path: spec.template.metadata.labels.app
+                  value: {{istio_ingressgateway_secondary_name}}
+                - path: spec.template.metadata.labels.istio
+                  value: istio_ingressgateway_secondary_selector
+            - kind: Service
+              name: {{istio_ingressgateway_secondary_name}}
+              patches:
+                - path: metadata.labels.app
+                  value: {{istio_ingressgateway_secondary_name}}
+                - path: metadata.labels.istio
+                  value: istio_ingressgateway_secondary_selector
+                - path: spec.selector.app
+                  value: {{istio_ingressgateway_secondary_name}}
+                - path: spec.selector.istio
+                  value: istio_ingressgateway_secondary_selector
+
             
           service:
             ports:
@@ -96,7 +135,7 @@ spec:
               protocol: TCP
               targetPort: 8080
             - name: https
-              nodePort: 32701
+              nodePort: {{istio_ingressgateway_nodeport_secondary}}
               port: 443
               protocol: TCP
               targetPort: 8443
@@ -108,6 +147,3 @@ spec:
               port: 15443
               protocol: TCP
               targetPort: 15443
-
-
-

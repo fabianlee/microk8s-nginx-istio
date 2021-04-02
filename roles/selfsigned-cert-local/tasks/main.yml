@@ -1,0 +1,30 @@
+---
+
+# ansible-galaxy collection install community.crypto
+# needs PyOpenSSL or cryptogrphy
+
+- name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
+  community.crypto.openssl_privatekey:
+    path: "{{TMPDIR}}/{{primary_domain}}.key"
+
+- name: Generate an OpenSSL Certificate Signing Request
+  community.crypto.openssl_csr:
+    path: "{{TMPDIR}}/{{primary_domain}}.csr"
+    privatekey_path: "{{TMPDIR}}/{{primary_domain}}.key"
+    key_usage:
+      - digitalSignature
+      - keyAgreement
+    extended_key_usage:
+      - clientAuth
+    common_name: "{{primary_domain}}"
+    subject_alt_name: "{{ item.value | map('regex_replace', '^', 'DNS:') | list }}"
+  with_dict:
+    dns_server: "{{ san_domains }}"
+
+- name: Generate a Self Signed OpenSSL certificate
+  community.crypto.x509_certificate:
+    path: "{{TMPDIR}}/{{primary_domain}}.crt"
+    privatekey_path: "{{TMPDIR}}/{{primary_domain}}.key"
+    csr_path: "{{TMPDIR}}/{{primary_domain}}.csr"
+    provider: selfsigned
+

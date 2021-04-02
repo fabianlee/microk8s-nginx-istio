@@ -1,0 +1,34 @@
+---
+
+- name: check kubectl
+  become: yes
+  command: kubectl get nodes
+  register: getnodes
+- debug: msg="{{getnodes.stdout_lines}}"
+
+- debug: msg="{{TMPDIR}}"
+
+- name: copy key and cert to target host
+  file:
+    # src is from ansible invoking host
+    # dest is remote target host
+    src: "{{item}}"
+    dest: "{{item}}"
+  loop:
+    - "{{TMPDIR}}/{{primary_domain}}.crt"
+    - "{{TMPDIR}}/{{primary_domain}}.key"
+
+- name: create tls secret
+  command: kubectl create -n istio-system secret tls tls-credential --key={{TMPDIR}}/{{primary_domain}}.key --cert={{TMPDIR}}/{{primary_domain}}.crt
+  become: yes
+  register: create_result
+  failed_when: create_result.rc!=0 and not "AlreadyExists" in create_result.stderr
+- debug: msg="{{create_result.stderr_lines}}"
+
+- name: describe tls secret
+  command: kubectl describe -n istio-system secret tls-credential
+  become: yes
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+
+

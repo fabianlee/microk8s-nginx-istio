@@ -1,0 +1,23 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gateway-ingressgateway-secondary
+spec:
+  selector:
+    istio: "{{istio_ingressgateway_secondary_selector}}"
+  servers:
+  - port:
+      number: 80
+      name: http-secondary
+      protocol: HTTP
+    hosts: "{{ san_domains | first }}"
+  - port:
+      name: https-secondary
+      number: 443
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: tls-credential
+    hosts: "{{ san_domains | first }}"
+

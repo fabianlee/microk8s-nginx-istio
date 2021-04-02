@@ -16,6 +16,10 @@
     # configure this user's group, permissions, ~/.kube/config
     users: ['fabian']
 
+    # for cert creation (role=selfsigned-cert-local)
+    primary_domain: microk8s-1
+    san_domains: ['microk8s-1-secondary','microk8s-1-tertiary']
+
   roles:
     #- role: ansible_role_microk8s
     #- role: microk8s-get-kubeconfig
@@ -23,4 +27,13 @@
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard
     #- role: istio-operator
+
+    # ansible-galaxy collection install community.crypto
+    #- role: selfsigned-cert-local
+    #  delegate_to: localhost
+
+    # simple hello world
     #- role: istio-helloworld
+
+    - role: istio-gateway
+

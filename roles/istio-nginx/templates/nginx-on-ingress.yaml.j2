@@ -1,0 +1,21 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: nginx-on-gateway-ingressgateway
+spec:
+  hosts:
+  - "staging.core.opentext.com"
+  gateways:
+  - gateway-ingressgateway
+  http:
+  - match:
+    - uri:
+        exact: /index.html
+    route:
+    - destination:
+        #host: nginx.default.svc.cluster.local
+        host: nginx-service
+        port:
+          number: 8080
+
