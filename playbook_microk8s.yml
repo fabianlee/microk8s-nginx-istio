@@ -18,10 +18,11 @@
     # configure these users: group, permissions, ~/.kube/config
     users: ['fabian']
 
-    # for self-signed certificate
+    # for SAN certificate with custom CA
     cert_domains_primary_ingress: ['microk8s-1.local','microk8s-alt.local']
     cert_domains_secondary_ingress: ['microk8s-secondary.local']
-    cert_overwrite: no
+    #cert_overwrite: no
+    #tls_secret_overwrite: no
 
   roles:
     #- role: ansible_role_microk8s

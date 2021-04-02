@@ -12,11 +12,16 @@
   register: cert_existence
   failed_when: not cert_existence.stat.exists
   loop:
-    - "{{TMPDIR}}/{{primary_domain}}.crt"
-    - "{{TMPDIR}}/{{primary_domain}}.key"
+    - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt"
+    - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key"
+
+- name: delete tls secret when tls_secret_overwrite set to yes
+  command: kubectl delete -n istio-system secret tls-credential
+  become: yes
+  when: tls_secret_overwrite
 
 - name: create tls secret
-  command: kubectl create -n istio-system secret tls tls-credential --key={{TMPDIR}}/{{primary_domain}}.key --cert={{TMPDIR}}/{{primary_domain}}.crt
+  command: kubectl create -n istio-system secret tls tls-credential --key={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key --cert={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt
   become: yes
   register: create_result
   failed_when: create_result.rc!=0 and not "AlreadyExists" in create_result.stderr

@@ -5,3 +5,6 @@ istio_ingressgateway_primary_selector: ingressgateway
 
 istio_ingressgateway_secondary_name: istio-ingressgateway-secondary
 istio_ingressgateway_secondary_selector: ingressgateway-secondary
+
+# whether to recreate k8s level tls secret
+tls_secret_overwrite: no
