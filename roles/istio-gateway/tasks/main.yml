@@ -57,3 +57,5 @@
   with_fileglob: "../templates/hello*.j2"
 - debug: msg="{{stdout.results}}"
 
+- debug: msg="TODO test curl directly to pods IP:5000, then curl directly to service IP:5000"
+
