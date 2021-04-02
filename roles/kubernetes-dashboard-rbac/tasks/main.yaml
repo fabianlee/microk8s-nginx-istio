@@ -41,21 +41,6 @@
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
 
-#- name: get k8s dashboard token
-#  slurp: src="{{TMPDIR}}/k8s-token.txt"
-#  register: dashboard_token
-#- debug: msg="{{dashboard_token.content}}"
-#
-#- name: save dashboard token as fact
-#  set_fact:
-#    dashboard_token_fact: "{{ dashboard_token.content }}"
-#
-#- name: create dashboard token file
-#  template:
-#    src: k8s-dashboard-token.txt.j2
-#    dest: "{{TMPDIR}}/microk8s-dashboard-token.txt"
-#    mode: '0666'
-#
 - name: slurp dashboard token back to calling host
   fetch:
     src: "{{TMPDIR}}/microk8s-dashboard-token.txt"

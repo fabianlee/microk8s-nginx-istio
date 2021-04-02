@@ -7,18 +7,24 @@
 
   vars:
     microk8s_version: "1.20/stable"
+
     # on Ubuntu focal, throws error on first run, so skipping
     microk8s_plugin_helm3_enable: false
     # false for virtualbox vm, where creating 'lo:microk8s' static IP will hang
     microk8s_plugin_host_access_enable: false
+
     # not a cluster
     microk8s_enabled_HA: false
-    # configure this user's group, permissions, ~/.kube/config
+    # configure these users: group, permissions, ~/.kube/config
     users: ['fabian']
 
-    # for cert creation (role=selfsigned-cert-local)
+    # for self-signed certificate
     primary_domain: microk8s-1
     san_domains: ['microk8s-1-secondary','microk8s-1-tertiary']
+
+    # name and selector for secondary istio ingress gateway
+    istio_ingressgateway_secondary_name: istio-ingressgateway-secondary # primary=istio-ingressgateway
+    istio_ingressgateway_secondary_selector: ingressgateway-secondary # primary=ingressgateway
 
   roles:
     #- role: ansible_role_microk8s
