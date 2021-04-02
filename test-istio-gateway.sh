@@ -33,10 +33,10 @@ function call_curl() {
     expectSuccess=0
   fi
 
-  set -x
-  curl --fail --resolve $domain:$port:$gateway -x '' $protocol://$domain:$port/$page
+  #set -x
+  curl --insecure --fail --resolve $domain:$port:$gateway -x '' $protocol://$domain:$port/$page
   retVal=$?
-  set +x
+  #set +x
 
   # is this what we wanted?
   if [[ $retVal -eq 0 && $expectSuccess -eq 0 ]]; then
@@ -62,9 +62,9 @@ for domain in $gwextfqdnlist ; do
   echo ""; echo "";
   echo "***Correct Host header $domain to external $gwextip**********************************************"
   call_curl $gwextip $domain http "hello" 80 0
-  echo | openssl s_client -verify_return_error -servername $domain -connect $gwextip:443 -showcerts > /dev/null
+  echo | openssl s_client -verify_return_error -servername $domain -connect $gwextip:443 -showcerts > /dev/null 2>&1
   certOK=$?
-  [ $certOK eq 0 ] || { echo "ERROR: cert error going to $gwextip:443 domain $domain"; exit 3; }
+  [ $certOK -eq 0 ] || { echo "ERROR: cert error going to $gwextip:443 domain $domain"; exit 3; }
   call_curl $gwextip $domain https "hello" 443 0
 done
 

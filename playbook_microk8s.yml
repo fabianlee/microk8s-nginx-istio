@@ -19,12 +19,9 @@
     users: ['fabian']
 
     # for self-signed certificate
-    primary_domain: microk8s-1
-    san_domains: ['microk8s-1-secondary','microk8s-1-tertiary']
-
-    # name and selector for secondary istio ingress gateway
-    istio_ingressgateway_secondary_name: istio-ingressgateway-secondary # primary=istio-ingressgateway
-    istio_ingressgateway_secondary_selector: ingressgateway-secondary # primary=ingressgateway
+    cert_domains_primary_ingress: ['microk8s-1.local','microk8s-alt.local']
+    cert_domains_secondary_ingress: ['microk8s-secondary.local']
+    cert_overwrite: no
 
   roles:
     #- role: ansible_role_microk8s
@@ -32,7 +29,7 @@
     #- role: k9s
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard
-    - role: istio-operator
-    #- role: selfsigned-cert
-    #- role: istio-gateway
+    #- role: istio-operator
+    #- role: cert-with-ca
+    - role: istio-gateway
 

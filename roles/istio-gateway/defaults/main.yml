@@ -1,1 +1,7 @@
 TMPDIR: "{{ lookup('env','TMPDIR') | default('/tmp',true)  }}"
+
+istio_ingressgateway_primary_name: istio-ingressgateway
+istio_ingressgateway_primary_selector: ingressgateway
+
+istio_ingressgateway_secondary_name: istio-ingressgateway-secondary
+istio_ingressgateway_secondary_selector: ingressgateway-secondary
