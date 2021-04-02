@@ -4,7 +4,7 @@ kind: VirtualService
 metadata:
   name: hello-v1-on-gateway-ingressgateway
 spec:
-  hosts: "{{ [primary_domain] + san_domains }}"
+  hosts: {{ ([primary_domain] + san_domains) | to_json }}
   gateways:
   - gateway-ingressgateway
   http:

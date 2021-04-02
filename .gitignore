@@ -1,2 +1,3 @@
 *.retry
 ansible_inventory
+nohup.out

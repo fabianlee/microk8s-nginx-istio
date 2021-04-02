@@ -11,7 +11,7 @@ spec:
       number: 80
       name: http-secondary
       protocol: HTTP
-    hosts: "{{ san_domains | first }}"
+    hosts: [ '{{ san_domains | first }}' ]
   - port:
       name: https-secondary
       number: 443
@@ -19,5 +19,5 @@ spec:
     tls:
       mode: SIMPLE
       credentialName: tls-credential
-    hosts: "{{ san_domains | first }}"
+    hosts: [ '{{ san_domains | first }}' ]
 

@@ -59,14 +59,14 @@ spec:
               protocol: TCP
               targetPort: 15443
 
-#          overlays:
-#            - kind: Service
-#              name: istio-ingressgateway
-#              patches:
+          overlays:
+            - kind: Service
+              name: istio-ingressgateway
+              patches:
 #                - path: spec.loadBalancerIP
 #                  value: 10.152.183.213
-#                - path: spec.loadBalancerSourceRanges
-#                  value: [ 10.0.0.0/8 ]
+                - path: spec.loadBalancerSourceRanges
+                  value: [ 10.0.0.0/8 ]
 
 
       # secondary, independent ingress
@@ -121,6 +121,8 @@ spec:
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: spec.selector.istio
                   value: istio_ingressgateway_secondary_selector
+                - path: spec.loadBalancerSourceRanges
+                  value: [ 10.0.0.0/8 ]
 
             
           service:
