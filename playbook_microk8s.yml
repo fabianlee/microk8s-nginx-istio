@@ -27,13 +27,7 @@
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard
     #- role: istio-operator
-
-    # ansible-galaxy collection install community.crypto
-    #- role: selfsigned-cert-local
-    #  delegate_to: localhost
-
-    # simple hello world
-    #- role: istio-helloworld
+    #- role: selfsigned-cert
 
     - role: istio-gateway
 

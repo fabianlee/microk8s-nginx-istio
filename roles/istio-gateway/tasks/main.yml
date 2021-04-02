@@ -6,17 +6,22 @@
   register: getnodes
 - debug: msg="{{getnodes.stdout_lines}}"
 
-- debug: msg="{{TMPDIR}}"
-
-- name: copy key and cert to target host
-  file:
-    # src is from ansible invoking host
-    # dest is remote target host
-    src: "{{item}}"
-    dest: "{{item}}"
+- name: make sure cert pair exists
+  stat:
+    path: "{{item}}"
+  register: cert_existence
+  failed_when: not cert_existence.stat.exists
   loop:
     - "{{TMPDIR}}/{{primary_domain}}.crt"
     - "{{TMPDIR}}/{{primary_domain}}.key"
+
+#- name: assert existence of cert pairs
+#  debug:
+#    msg: "{{item.item}} is {{item.stat.exists}}"
+#  failed_when: not item.stat.exists
+#  loop: "{{cert_existence.results}}"
+#
+#- meta: end_play
 
 - name: create tls secret
   command: kubectl create -n istio-system secret tls tls-credential --key={{TMPDIR}}/{{primary_domain}}.key --cert={{TMPDIR}}/{{primary_domain}}.crt
@@ -30,5 +35,4 @@
   become: yes
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
-
 

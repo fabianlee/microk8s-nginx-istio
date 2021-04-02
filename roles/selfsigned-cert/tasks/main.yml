@@ -1,11 +1,14 @@
 ---
 
-# ansible-galaxy collection install community.crypto
+# dependency on: ansible-galaxy collection install community.crypto
 # needs PyOpenSSL or cryptogrphy
+#
+# set to force:no so that once a key/cert pair is created, we don't overwrite
 
 - name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
   community.crypto.openssl_privatekey:
     path: "{{TMPDIR}}/{{primary_domain}}.key"
+    force: no
 
 - name: Generate an OpenSSL Certificate Signing Request
   community.crypto.openssl_csr:
@@ -18,6 +21,7 @@
       - clientAuth
     common_name: "{{primary_domain}}"
     subject_alt_name: "{{ item.value | map('regex_replace', '^', 'DNS:') | list }}"
+    force: no
   with_dict:
     dns_server: "{{ san_domains }}"
 
@@ -27,4 +31,5 @@
     privatekey_path: "{{TMPDIR}}/{{primary_domain}}.key"
     csr_path: "{{TMPDIR}}/{{primary_domain}}.csr"
     provider: selfsigned
+    force: no
 
