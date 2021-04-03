@@ -46,8 +46,6 @@
     dest: /{{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
   with_fileglob: "../templates/*.j2"
 
-#- meta:  end_play
-
 - name: apply istio Gateway configs
   shell: kubectl apply -f /{{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
   become: yes
@@ -63,4 +61,16 @@
 - debug: msg="{{stdout.results}}"
 
 - debug: msg="TODO test curl directly to pods IP:5000, then curl directly to service IP:5000"
+
+- command: kubectl get service istio-ingressgateway -n istio-system --output jsonpath='{.spec.clusterIP}'
+  register: primary_clusterIP
+- command: kubectl get service istio-ingressgateway-secondary -n istio-system --output jsonpath='{.spec.clusterIP}'
+  register: secondary_clusterIP
+- debug: msg="ClusterIP primary/secondary {{":"}} {{primary_clusterIP.stdout}}/{{secondary_clusterIP.stdout}}"
+
+- name: test pulling pages from primary and secondary ingress gateways
+  command: "{{role_path}}/files/test-istio-gateway.sh {{primary_clusterIP.stdout}} {{cert_domains_primary_ingress|join(',')}} {{secondary_clusterIP.stdout}} {{cert_domains_secondary_ingress|join(',')}}"
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+- debug: msg="{{stdout.cmd | join(' ') }}"
 
