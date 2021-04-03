@@ -5,7 +5,7 @@
 
 if [ "$#" -lt 2 ]; then
   echo "Usage: gatewayip-ext fqdn1,fqdn2 [gatewayip-int fqdn]"
-  echo "Example: 10.152.183.138 microk8s-1.local,microk8s-alt.local 10.152.183.39 microk8s-secondary.local"
+  echo "Example: 10.152.183.138 microk8s-1.local,microk8s-alt.local 10.152.183.129 microk8s-secondary.local"
   exit 1
 fi
 gwextip="$1"
@@ -35,7 +35,8 @@ function call_curl() {
 
   echo "[ $protocol://$domain:$port/page ]"
 
-  if [[ $port -eq 443 ]]; then
+  # only check cert when trying tls and caller is expecting success
+  if [[ $port -eq 443 && $expectSuccess -eq 0 ]]; then
     echo | openssl s_client -verify_return_error -servername $domain -connect $gateway:$port -showcerts > /dev/null 2>&1
     certOK=$?
     [ $certOK -eq 0 ] || { echo "ERROR: cert error going to $gateway:$port domain $domain"; exit 3; }

@@ -101,26 +101,26 @@ spec:
                 - path: metadata.labels.app
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: metadata.labels.istio
-                  value: istio_ingressgateway_secondary_selector
+                  value: {{istio_ingressgateway_secondary_selector}}
                 - path: spec.selector.matchLabels.app
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: spec.selector.matchLabels.istio
-                  value: istio_ingressgateway_secondary_selector
+                  value: {{istio_ingressgateway_secondary_selector}}
                 - path: spec.template.metadata.labels.app
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: spec.template.metadata.labels.istio
-                  value: istio_ingressgateway_secondary_selector
+                  value: {{istio_ingressgateway_secondary_selector}}
             - kind: Service
               name: {{istio_ingressgateway_secondary_name}}
               patches:
                 - path: metadata.labels.app
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: metadata.labels.istio
-                  value: istio_ingressgateway_secondary_selector
+                  value: {{istio_ingressgateway_secondary_selector}}
                 - path: spec.selector.app
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: spec.selector.istio
-                  value: istio_ingressgateway_secondary_selector
+                  value: {{istio_ingressgateway_secondary_selector}}
                 - path: spec.loadBalancerSourceRanges
                   value: [ 10.0.0.0/8 ]
 

@@ -30,7 +30,7 @@
     #- role: k9s
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard
-    #- role: istio-operator
+    - role: istio-operator
     #- role: cert-with-ca
     - role: istio-gateway
 
