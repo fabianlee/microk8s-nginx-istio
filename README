@@ -1,6 +1,5 @@
 microk8s installation and post-configuration
 
-
 Using this ansible role for main installation:
 https://github.com/istvano/ansible_role_microk8s.git
 
