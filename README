@@ -11,6 +11,7 @@ And then additional roles for:
   * istio-operator installation
 
 
+
 instead of port forwarding, you can route all traffic to internal 10.152.183.0/24 directly to the VM
 
 # show routes
