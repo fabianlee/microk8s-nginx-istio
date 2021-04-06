@@ -24,12 +24,14 @@
     #cert_overwrite: no
     #tls_secret_overwrite: no
 
+    #istio_ingress_tested_on_localhost: true
+
   roles:
-    - role: ansible_role_microk8s
-    - role: microk8s-get-kubeconfig
-    - role: k9s
-    - role: kubectl-proxy
-    - role: kubernetes-dashboard-rbac
-    #- role: istio-operator
+    #- role: ansible_role_microk8s
+    #- role: microk8s-get-kubeconfig
+    #- role: k9s
+    #- role: kubectl-proxy
+    #- role: kubernetes-dashboard-rbac
     #- role: cert-with-ca
-    #- role: istio-gateway
+    #- role: istio-operator
+    - role: istio-gateway

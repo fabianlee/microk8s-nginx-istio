@@ -8,3 +8,7 @@ istio_ingressgateway_secondary_selector: ingressgateway-secondary
 
 # whether to recreate k8s level tls secret
 tls_secret_overwrite: no
+
+# whether istio ingress gateway ClusterIP are accessed from localhost
+# or remotely on microk8s host
+istio_ingress_tested_on_localhost: false

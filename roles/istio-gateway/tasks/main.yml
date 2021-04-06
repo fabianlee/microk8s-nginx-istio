@@ -33,11 +33,17 @@
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
 
+- name: copy helloworld manifests to host
+  copy:
+    src: "{{item}}"
+    dest: /{{TMPDIR}}/{{ item | basename }}
+  with_fileglob: "hello*.yaml"
+
 - name: apply helloworld v1 and v2 Deployment and Service
-  shell: kubectl apply -f {{item}}
+  shell: kubectl apply -f /{{TMPDIR}}/{{ item | basename }}
   become: yes
   register: stdout
-  with_fileglob: "../files/hello*.yaml"
+  with_fileglob: "hello*.yaml"
 - debug: msg="{{stdout.results}}"
 
 - name: create file out of every jinja2 templates
@@ -68,9 +74,30 @@
   register: secondary_clusterIP
 - debug: msg="ClusterIP primary/secondary {{":"}} {{primary_clusterIP.stdout}}/{{secondary_clusterIP.stdout}}"
 
-- name: test pulling pages from primary and secondary ingress gateways
-  command: "{{role_path}}/files/test-istio-gateway.sh {{primary_clusterIP.stdout}} {{cert_domains_primary_ingress|join(',')}} {{secondary_clusterIP.stdout}} {{cert_domains_secondary_ingress|join(',')}}"
-  register: stdout
-- debug: msg="{{stdout.stdout_lines}}"
-- debug: msg="{{stdout.cmd | join(' ') }}"
+- name: copy istio gateway test to remoet host
+  copy:
+    src: test-istio-gateway.sh
+    dest: "{{TMPDIR}}/test-istio-gateway.sh"
+    mode: '0755'
 
+- debug: 
+    msg: "test-istio-gateway.sh {{primary_clusterIP.stdout}} {{cert_domains_primary_ingress|join(',')}} {{secondary_clusterIP.stdout}} {{cert_domains_secondary_ingress|join(',') }}"
+
+- block:
+    - name: test pulling pages from primary and secondary ingress gateways, from localhost
+      delegate_to: localhost
+      command: "{{role_path}}/files/test-istio-gateway.sh {{primary_clusterIP.stdout}} {{cert_domains_primary_ingress|join(',')}} {{secondary_clusterIP.stdout}} {{cert_domains_secondary_ingress|join(',')}}"
+      register: stdout
+    - debug: msg="{{stdout.stdout_lines}}"
+    - debug: msg="{{stdout.cmd | join(' ') }}"
+  when: istio_ingress_tested_on_localhost
+
+- block:
+    - name: test pulling pages from primary and secondary ingress gateways, from target host
+      command: "{{TMPDIR}}/test-istio-gateway.sh {{primary_clusterIP.stdout}} {{cert_domains_primary_ingress|join(',')}} {{secondary_clusterIP.stdout}} {{cert_domains_secondary_ingress|join(',')}}"
+      register: stdout
+      when: not istio_ingress_tested_on_localhost
+
+    - debug: msg="{{stdout.stdout_lines}}"
+    - debug: msg="{{stdout.cmd | join(' ') }}"
+  when: not istio_ingress_tested_on_localhost
