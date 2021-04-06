@@ -90,14 +90,14 @@
       register: stdout
     - debug: msg="{{stdout.stdout_lines}}"
     - debug: msg="{{stdout.cmd | join(' ') }}"
-  when: istio_ingress_tested_on_localhost
+  when: istio_ingress_tested_from_localhost
 
 - block:
     - name: test pulling pages from primary and secondary ingress gateways, from target host
       command: "{{TMPDIR}}/test-istio-gateway.sh {{primary_clusterIP.stdout}} {{cert_domains_primary_ingress|join(',')}} {{secondary_clusterIP.stdout}} {{cert_domains_secondary_ingress|join(',')}}"
       register: stdout
-      when: not istio_ingress_tested_on_localhost
+      when: not istio_ingress_tested_from_localhost
 
     - debug: msg="{{stdout.stdout_lines}}"
     - debug: msg="{{stdout.cmd | join(' ') }}"
-  when: not istio_ingress_tested_on_localhost
+  when: not istio_ingress_tested_from_localhost
