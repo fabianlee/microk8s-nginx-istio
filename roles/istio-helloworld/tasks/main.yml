@@ -4,25 +4,14 @@
   debug: msg="{{ ansible_run_tags|default('') }}"
   tags: always
 
-- debug: msg="special tag to delete!!!"
-  when:
-    - '"delete" in ansible_run_tags'
-  tags: always
-
 - name: apply helloworld istio example
   import_tasks: apply.yml
-  # 'all' (special) invoke if no tags provided
-  # 'never' (special) do not invoke unless called
-  # 'apply' this tag will invoke
   tags: 
     - apply
     - never
-    - all
 
 - name: delete helloworld istio example
   import_tasks: delete.yml
-  # 'never' (special) do not invoke unless specified
-  # 'delete' this tag will invoke
   tags: 
-    - never
     - delete
+    - never

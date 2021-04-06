@@ -81,5 +81,8 @@
   community.crypto.x509_certificate_info:
     path: "{{cert_crt.filename}}"
   register: cert_result
-- debug: msg="{{cert_result}}"
-
+- debug: 
+    msg: >
+      subject: {{cert_result.subject}}
+      issuer: {{cert_result.issuer}}
+      subject_alt_name: {{cert_result.subject_alt_name}}
