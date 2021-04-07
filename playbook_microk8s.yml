@@ -24,6 +24,8 @@
     #cert_overwrite: no
     #tls_secret_overwrite: no
 
+    # version needed by more than one role (namespace labels)
+    istio_version: 1.7.5
     istio_ingress_tested_from_localhost: true
 
   roles:
@@ -34,4 +36,5 @@
     #- role: kubernetes-dashboard-rbac
     #- role: cert-with-ca
     #- role: istio-operator
-    - role: istio-gateway
+    #- role: istio-gateway
+    - role: istio-nginx
