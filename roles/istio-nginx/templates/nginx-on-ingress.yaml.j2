@@ -3,19 +3,19 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: nginx-on-gateway-ingressgateway
-  namespace: default #nginx-ns
+  namespace: nginx-ns
 spec:
   hosts: {{ cert_domains_primary_ingress | to_json }}
   gateways:
-  - gateway-ingressgateway
+  - default/gateway-ingressgateway
   http:
   - match:
     - uri:
         exact: /index.html
     route:
     - destination:
-        #host: nginx.default.svc.cluster.local
-        # need full qualifier if different namespace
+        # does not demand full qualifier
+        # short name, 'nginx-service' would be sufficient
         host: nginx-service.nginx-ns.svc.cluster.local
         port:
           number: 8080
