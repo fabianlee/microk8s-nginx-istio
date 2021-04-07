@@ -36,11 +36,11 @@
 - name: copy helloworld manifests to host
   copy:
     src: "{{item}}"
-    dest: /{{TMPDIR}}/{{ item | basename }}
+    dest: "{{TMPDIR}}/{{ item | basename }}"
   with_fileglob: "hello*.yaml"
 
 - name: apply helloworld v1 and v2 Deployment and Service
-  shell: kubectl apply -f /{{TMPDIR}}/{{ item | basename }}
+  shell: kubectl apply -f {{TMPDIR}}/{{ item | basename }}
   become: yes
   register: stdout
   with_fileglob: "hello*.yaml"
@@ -49,18 +49,18 @@
 - name: create file out of every jinja2 templates
   template:
     src: "{{item}}"
-    dest: /{{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
+    dest: "{{TMPDIR}}/{{ item | basename | regex_replace('.j2$', '') }}"
   with_fileglob: "../templates/*.j2"
 
 - name: apply istio Gateway configs
-  shell: kubectl apply -f /{{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
+  shell: kubectl apply -f {{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
   become: yes
   register: stdout
   with_fileglob: "../templates/gateway*.j2"
 - debug: msg="{{stdout.results}}"
 
 - name: apply hello v1 and v2 VirtualService configs that project to Gateway
-  shell: kubectl apply -f /{{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
+  shell: kubectl apply -f {{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
   become: yes
   register: stdout
   with_fileglob: "../templates/hello*.j2"

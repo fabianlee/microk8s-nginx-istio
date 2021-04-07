@@ -20,7 +20,7 @@
 - name: create file out of every jinja2 template
   template:
     src: "{{item}}"
-    dest: /{{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
+    dest: "{{TMPDIR}}/{{ item | basename | regex_replace('.j2$', '') }}"
   with_fileglob: "../templates/*.j2"
 
 - name: apply isto operator deployment config
