@@ -74,7 +74,7 @@
   register: secondary_clusterIP
 - debug: msg="ClusterIP primary/secondary {{":"}} {{primary_clusterIP.stdout}}/{{secondary_clusterIP.stdout}}"
 
-- name: copy istio gateway test to remoet host
+- name: copy istio gateway test to remote host
   copy:
     src: test-istio-gateway.sh
     dest: "{{TMPDIR}}/test-istio-gateway.sh"
