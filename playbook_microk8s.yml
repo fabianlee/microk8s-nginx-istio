@@ -37,4 +37,4 @@
     #- role: cert-with-ca
     #- role: istio-operator
     #- role: istio-gateway
-    - role: istio-nginx
+    - role: hello-app-with-ingress

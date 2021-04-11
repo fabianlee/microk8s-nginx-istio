@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-app-v1-on-nginx-ingress
+  namespace: hello-app-ns
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts: {{ cert_domains_primary_ingress | to_json }}
+    # must be in same namespace, cannot use "<ns>/" prefix
+    secretName: tls-credential
+  rules:
+  - host: {{ cert_domains_primary_ingress | first }}
+    http:
+      paths:
+      - pathType: Exact
+        path: "/"
+        backend:
+          service:
+            name: hello-app-v1-service
+            port:
+              number: 8080
+
