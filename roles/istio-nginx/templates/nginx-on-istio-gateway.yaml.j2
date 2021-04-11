@@ -15,8 +15,8 @@ spec:
     route:
     - destination:
         # does not demand full qualifier
-        # short name, 'nginx-service' would be sufficient
-        host: nginx-service.nginx-ns.svc.cluster.local
+        # short name, 'nginx-service' is sufficient (versus .<ns>.svc.cluster.local)
+        host: nginx-service
         port:
           number: 8080
 

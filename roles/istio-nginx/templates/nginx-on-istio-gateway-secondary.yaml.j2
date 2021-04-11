@@ -4,8 +4,7 @@ kind: VirtualService
 metadata:
   name: nginx-on-gateway-ingressgateway-int
 spec:
-  hosts:
-  - "microk8s-1-secondary"
+  hosts: {{ cert_domains_secondary_ingress | to_json }}
   gateways:
   - gateway-ingressgateway-int
   http:

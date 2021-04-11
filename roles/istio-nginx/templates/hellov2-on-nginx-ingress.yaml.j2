@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hellov2-on-nginx-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts: {{ cert_domains_primary_ingress | to_json }}
+    # must be in same namespace
+    secretName: tls-credential
+  rules:
+
+  - host: microk8s-1.local
+    http:
+      paths:
+      - pathType: Exact
+        path: "/hello"
+        backend:
+          service:
+            name: helloworld2
+            port:
+              number: 5000
+
