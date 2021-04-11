@@ -68,6 +68,35 @@
 
 - debug: msg="TODO test curl directly to pods IP:5000, then curl directly to service IP:5000"
 
+
+
+- name: kubectl to get helloworld service URL
+  command: |
+    kubectl get service helloworld -n default --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}/hello'
+  register: url_from_service
+- debug: msg="{{url_from_service.stdout}}"
+- name: test pull from helloworld
+  uri:
+    url: "{{url_from_service.stdout}}"
+    method: GET
+    return_content: true
+  register: pull_result
+- debug: msg="{{pull_result.content}}"
+
+- name: kubectl to get helloworld2 service URL
+  command: |
+    kubectl get service helloworld2 -n default --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}/hello'
+  register: url_from_service
+- debug: msg="{{url_from_service.stdout}}"
+- name: test pull from helloworld2
+  uri:
+    url: "{{url_from_service.stdout}}"
+    method: GET
+    return_content: true
+  register: pull_result
+- debug: msg="{{pull_result.content}}"
+
+
 - command: kubectl get service istio-ingressgateway -n istio-system --output jsonpath='{.spec.clusterIP}'
   register: primary_clusterIP
 - command: kubectl get service istio-ingressgateway-secondary -n istio-system --output jsonpath='{.spec.clusterIP}'

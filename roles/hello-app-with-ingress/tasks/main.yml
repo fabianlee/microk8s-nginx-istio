@@ -31,13 +31,13 @@
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
 
-- name: kubectl to get service IP
+- name: kubectl to get hello-app-v1-service URL
   command: |
     kubectl get service hello-app-v1-service -n hello-app-ns --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}'
   register: url_from_service
 - debug: msg="{{url_from_service.stdout}}"
 
-- name: test pull from hello-app-v1-servic3
+- name: test pull from hello-app-v1-service
   uri:
     url: "{{url_from_service.stdout}}"
     method: GET
