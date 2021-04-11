@@ -46,3 +46,26 @@
 - debug: msg="{{pull_result.content}}"
 
 
+
+- name: kubectl to get insecure nginx ingress controller service URL
+  command: |
+    kubectl get service ingress-nginx-controller -n ingress-nginx --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}'
+  register: http_ingress
+- debug: msg="{{http_ingress.stdout}}"
+- name: kubectl to get secure nginx ingress controller service URL
+  command: |
+    kubectl get service ingress-nginx-controller -n ingress-nginx --output jsonpath='https://{.spec.clusterIP}:{.spec.ports[?(@.name=="https")].port}'
+  register: https_ingress
+- debug: msg="{{https_ingress.stdout}}"
+
+- name: test pull from secure nginx ingress
+  uri:
+    url: "{{https_ingress.stdout}}"
+    method: GET
+    return_content: true
+    validate_certs: false
+    headers:
+      Host: "{{ cert_domains_primary_ingress | first }}"
+  register: pull_result
+- debug: msg="{{pull_result.content}}"
+

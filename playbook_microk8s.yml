@@ -36,5 +36,5 @@
     #- role: kubernetes-dashboard-rbac
     #- role: cert-with-ca
     #- role: istio-operator
-    - role: istio-gateway
-    #- role: hello-app-with-ingress
+    #- role: istio-gateway
+    - role: hello-app-with-ingress
