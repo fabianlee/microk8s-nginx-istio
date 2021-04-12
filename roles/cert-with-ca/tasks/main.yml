@@ -103,3 +103,4 @@
   command: openssl verify -CAfile {{ca_crt.filename}} {{cert_crt.filename}}
   register: cert_validate
 - debug: msg="{{cert_validate.stdout}}"
+

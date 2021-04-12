@@ -22,8 +22,8 @@
     cert_CA: myCA.local
     cert_domains_primary_ingress: ['microk8s-1.local','microk8s-alt.local']
     cert_domains_secondary_ingress: ['microk8s-secondary.local']
-    cert_overwrite: yes
-    tls_secret_overwrite: true
+    #cert_overwrite: yes
+    #tls_secret_overwrite: true
 
     # version needed by more than one role (namespace labels)
     istio_version: 1.7.5
@@ -38,5 +38,5 @@
     #- role: cert-with-ca
     #- role: istio-operator
     #- role: istio-gateway
-    #- role: hello-app-with-ingress
-    - role: reapply-tls-secrets
+    #- role: hello-app-with-nginx-ingress
+    #- role: reapply-tls-secrets

@@ -69,3 +69,6 @@
   register: pull_result
 - debug: msg="{{pull_result.content}}"
 
+#- name: test cert and CA using openssl
+#  shell: echo | openssl s_client -showcerts -servername microk8s-1.local -connect 10.152.183.204:443 -CAfile /tmp/myCA.local.crt
+
