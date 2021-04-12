@@ -1,0 +1,31 @@
+---
+
+- name: check kubectl
+  become: yes
+  command: kubectl get nodes
+  register: getnodes
+- debug: msg="{{getnodes.stdout_lines}}"
+
+- name: make sure cert pair exists
+  stat:
+    path: "{{item}}"
+  register: cert_existence
+  failed_when: not cert_existence.stat.exists
+  loop:
+    - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt"
+    - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key"
+
+
+- name: delete tls secret when tls_secret_overwrite set to yes
+  command: kubectl delete -n {{item}} secret tls-credential
+  become: yes
+  loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
+
+
+- name: create tls secret
+  command: kubectl create -n {{item}} secret tls tls-credential --key={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key --cert={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt
+  become: yes
+  register: create_result
+  loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
+
+- debug: msg="{{create_result}}"

@@ -1,0 +1,5 @@
+---
+  
+- name: recreate tls secrets
+  import_tasks: recreate-tls.yml
+  when: tls_secret_overwrite
