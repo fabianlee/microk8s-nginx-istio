@@ -28,4 +28,7 @@
   register: create_result
   loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
 
-- debug: msg="{{create_result}}"
+- debug: msg="ok"
+  loop: "{{create_result.results}}"
+  loop_control:
+    label: "{{item.stdout}}"
