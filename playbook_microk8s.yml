@@ -19,9 +19,10 @@
     users: ['ubuntu'] # fabian for virtualbox, ubuntu for 
 
     # for SAN certificate with custom CA
+    cert_CA: myCA.local
     cert_domains_primary_ingress: ['microk8s-1.local','microk8s-alt.local']
     cert_domains_secondary_ingress: ['microk8s-secondary.local']
-    #cert_overwrite: no
+    cert_overwrite: yes
     tls_secret_overwrite: true
 
     # version needed by more than one role (namespace labels)
@@ -34,7 +35,7 @@
     #- role: k9s
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard-rbac
-    #- role: cert-with-ca
+    - role: cert-with-ca
     #- role: istio-operator
     #- role: istio-gateway
     #- role: hello-app-with-ingress

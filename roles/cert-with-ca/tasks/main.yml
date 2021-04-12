@@ -10,21 +10,30 @@
 #
 - name: create CA key
   community.crypto.openssl_privatekey:
-    path: "{{TMPDIR}}/myCA.key"
+    path: "{{TMPDIR}}/{{cert_CA}}.key"
     force: "{{cert_overwrite}}"
   register: ca_key
 
 - name: create the CA CSR
   community.crypto.openssl_csr:
-    path: "{{TMPDIR}}/myCA.csr"
+    path: "{{TMPDIR}}/{{cert_CA}}.csr"
     privatekey_path: "{{ ca_key.filename }}"
-    common_name: "myCA"
+    # constraints and usage required by CA
+    basic_constraints_critical: true
+    basic_constraints:
+      - CA:TRUE
+      - pathlen:0
+    key_usage:
+      - digitalSignature
+      - cRLSign
+      - keyCertSign
+    common_name: "{{cert_CA}}"
     force: "{{cert_overwrite}}"
   register: ca_csr
 
 - name: sign the CA CSR
   openssl_certificate:
-    path: "{{TMPDIR}}/myCA.crt"
+    path: "{{TMPDIR}}/{{cert_CA}}.crt"
     csr_path: "{{ ca_csr.filename }}"
     privatekey_path: "{{ ca_key.filename }}"
     provider: selfsigned
@@ -86,3 +95,8 @@
       subject: {{cert_result.subject}}
       issuer: {{cert_result.issuer}}
       subject_alt_name: {{cert_result.subject_alt_name}}
+
+- name: verify cert against CA using openssl
+  command: openssl verify -CAfile {{ca_crt.filename}} {{cert_crt.filename}}
+  register: cert_validate
+- debug msg="{{cert_validate.stdout}}"
