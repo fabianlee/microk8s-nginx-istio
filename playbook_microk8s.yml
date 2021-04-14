@@ -40,3 +40,4 @@
     #- role: istio-gateway
     #- role: hello-app-with-nginx-ingress
     #- role: reapply-tls-secrets
+    - role: nginx-ingress

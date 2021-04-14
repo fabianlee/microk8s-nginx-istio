@@ -1,0 +1,37 @@
+---
+
+- name: create kubectl config
+  become: yes
+  changed_when: true
+  shell: microk8s config > ~/.kube/config
+  args:
+    executable: /bin/bash
+
+- name: check kubectl
+  become: yes
+  command: kubectl get nodes
+  register: getnodes
+- debug: msg="{{getnodes.stdout_lines}}"
+
+- name: get nginx cloud provider file, try to pull from github first
+  get_url:
+    url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud/deploy.yaml
+    dest: "{{TMPDIR}}/nginx-cloud-deploy.yaml"
+    mode: 0766
+  ignore_errors: true
+  register: gitpull_result
+- debug: msg="{{gitpull_result}}"
+
+- name: uses local nginx cloud provider file when github not available
+  copy:
+    src: provider-cloud-deploy.yaml
+    dest: "{{TMPDIR}}/nginx-cloud-deploy.yaml"
+  when: gitpull_result.failed
+
+- name: apply nginx deployment
+  shell: kubectl apply -f {{TMPDIR}}/nginx-cloud-deploy.yaml
+  become: yes
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+
+
