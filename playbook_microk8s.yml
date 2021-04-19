@@ -5,16 +5,18 @@
   gather_facts: yes
   become: yes
 
+  # most vars are coming from 'group_vars/' directory
   vars:
     # set to true if more than one host in microk8s_HA group
     microk8s_enable_HA: false
 
+  # these roles will be applied to each vm in cluster
   roles:
     - role: microk8s-prereq
     - role: ansible_role_microk8s
-    - role: cert-with-ca
     - role: k9s
 
+    #- role: cert-with-ca
     #- role: microk8s-get-kubeconfig
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard-rbac

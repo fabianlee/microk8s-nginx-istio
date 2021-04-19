@@ -1,4 +1,5 @@
 TMPDIR: "{{ lookup('env','TMPDIR') | default('/tmp',true)  }}"
+LOCALDIR: "/tmp"
 
 # default name for CA
 cert_CA: myCA

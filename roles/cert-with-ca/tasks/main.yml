@@ -40,6 +40,17 @@
     force: "{{cert_overwrite}}"
   register: ca_crt
 
+- name: remove local ca cert, before fetching again
+  delegate_to: localhost
+  file:
+    path: "{{LOCALDIR}}/{{ca_crt.filename}}"
+    state: absent
+- name: copy ca cert locally, so it can be loaded into trusted CA
+  fetch:
+    src: "{{ca_crt.filename}}"
+    dest: "{{LOCALDIR}}/"
+    flat: true
+
 - name: Generate an OpenSSL private key with the default values (4096 bits, RSA)
   community.crypto.openssl_privatekey:
     path: "{{TMPDIR}}/{{cert_domains_primary_ingress | first}}.key"
@@ -75,6 +86,17 @@
     provider: ownca # selfsigned if this had been self-signed
     force: "{{cert_overwrite}}"
   register: cert_crt
+
+- name: remove local cert, before fetching again
+  delegate_to: localhost
+  file:
+    path: "{{LOCALDIR}}/{{cert_crt.filename}}"
+    state: absent
+- name: copy cert locally, so it can be added as trusted cert
+  fetch:
+    src: "{{cert_crt.filename}}"
+    dest: "{{LOCALDIR}}/"
+    flat: true
 
 - name: generate pkcs12 file
   community.crypto.openssl_pkcs12:
