@@ -1,43 +1,27 @@
 ---
 # ansible-playbook playbook_microk8s.yml
 
-- hosts: microk8s
+- hosts: microk8s_HA
   gather_facts: yes
   become: yes
 
   vars:
-    microk8s_version: "1.20/stable"
-
-    # on Ubuntu focal, throws error on first run, so skipping
-    microk8s_plugin_helm3_enable: false
-    # false for virtualbox vm, where creating 'lo:microk8s' static IP will hang
-    microk8s_plugin_host_access_enable: false
-
-    # not a cluster
-    microk8s_enabled_HA: false
-    # configure these users: group, permissions, ~/.kube/config
-    users: ['ubuntu'] # fabian for virtualbox, ubuntu for 
-
-    # for SAN certificate with custom CA
-    cert_CA: myCA.local
-    cert_domains_primary_ingress: ['microk8s-1.local','microk8s-alt.local']
-    cert_domains_secondary_ingress: ['microk8s-secondary.local']
-    #cert_overwrite: yes
-    #tls_secret_overwrite: true
-
-    # version needed by more than one role (namespace labels)
-    istio_version: 1.7.5
-    istio_ingress_tested_from_localhost: true
+    # set to true if more than one host in microk8s_HA group
+    microk8s_enable_HA: false
 
   roles:
-    #- role: ansible_role_microk8s
+    - role: microk8s-prereq
+    - role: ansible_role_microk8s
+    - role: cert-with-ca
+    - role: k9s
+
     #- role: microk8s-get-kubeconfig
-    #- role: k9s
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard-rbac
-    #- role: cert-with-ca
+    #- role: additional-netplan-ip
+    #- role: reapply-tls-secrets
+    #- role: nginx-ingress
+
     #- role: istio-operator
     #- role: istio-gateway
     #- role: hello-app-with-nginx-ingress
-    #- role: reapply-tls-secrets
-    - role: nginx-ingress

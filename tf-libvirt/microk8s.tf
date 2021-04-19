@@ -9,6 +9,8 @@ variable "diskPool" { default = "default" }
 locals {
   microk8s = {
     "microk8s-1" = { os_code_name = "focal", octetIP = "210", vcpu=4, memoryMB=1024*12, incGB=60 },
+    #"microk8s-2" = { os_code_name = "focal", octetIP = "211", vcpu=4, memoryMB=1024*4, incGB=60 },
+    #"microk8s-3" = { os_code_name = "focal", octetIP = "212", vcpu=4, memoryMB=1024*4, incGB=60 },
   }
 }
 
@@ -92,6 +94,19 @@ data "template_file" "network_config" {
   }
 }
 
+# uses bridged network from host
+# https://www.desgehtfei.net/en/quick-start-kvm-libvirt-vms-with-terraform-and-ansible-part-1-2/
+#resource "libvirt_network" "vmbridge" {
+#  name = "vmbridge"
+#  # nat|none|route|bridge
+#  mode = "bridge"
+#
+#  # name of kvm bridge definition
+#  # virsh net-list
+#  bridge = "host-bridge"
+#  autostart = true
+#}
+
 
 # Create the machine
 resource "libvirt_domain" "domain-ubuntu" {
@@ -107,6 +122,15 @@ resource "libvirt_domain" "domain-ubuntu" {
 
   network_interface {
        network_name = "default"
+  }
+
+  # only give additional LoadBalancer NIC to first host
+  dynamic "network_interface" {
+    for_each = index(keys(local.microk8s),each.key)==0 ? [1] : []
+    content {
+     network_name = "host-bridge"
+     addresses = ["192.168.2.141"]
+    }
   }
 
   cloudinit = libvirt_cloudinit_disk.cloudinit[each.key].id
@@ -127,7 +151,9 @@ resource "libvirt_domain" "domain-ubuntu" {
   }
 }
 
-
+output "hosts_1_network" {
+  value = libvirt_domain.domain-ubuntu["microk8s-1"].network_interface[*]
+}
 output "hosts" {
   # output does not support 'for_each', so use zipmap as workaround
   value = zipmap( 

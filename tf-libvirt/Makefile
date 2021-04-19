@@ -21,7 +21,8 @@ create-keypair:
 	[ -f id_rsa ] || ssh-keygen -t rsa -b 4096 -f id_rsa -C $(PROJECT) -N "" -q
 
 refresh:
-	$(TF)refresh && $(TF)output
+	$(TF) refresh
+	$(TF) output
 
 libvirt-pool:
 	$(eval POOLDIR=$(shell virsh pool-dumpxml default | grep -E "<path>.*</path>" | grep -Po "(?<=\>)[^<]+"))

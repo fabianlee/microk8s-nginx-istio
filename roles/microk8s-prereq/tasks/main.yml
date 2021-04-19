@@ -1,0 +1,33 @@
+---
+
+- name: install list of packages
+  apt:
+    pkg:
+    - net-tools # netstat
+    - jq # json tool
+    state: present
+
+- name: soft limit for nofile
+  pam_limits:
+    domain: '*'
+    limit_type: soft
+    limit_item: nofile
+    value: "{{ limit_nofile | int }}"
+
+- name: hard limit for nofile
+  pam_limits:
+    domain: '*'
+    limit_type: hard
+    limit_item: nofile
+    value: "{{ limit_nofile | int }}"
+
+- name: Disable swapoff
+  shell: swapoff -a
+
+- name: Disable swapoff permanently
+  replace:
+    path: /etc/fstab
+    regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    replace: '#\1\2\3swap\4'
+    backup: yes
+

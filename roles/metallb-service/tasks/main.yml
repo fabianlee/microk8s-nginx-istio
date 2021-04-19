@@ -1,0 +1,39 @@
+---
+
+- name: create kubectl config
+  become: yes
+  changed_when: true
+  shell: microk8s config > ~/.kube/config
+  args:
+    executable: /bin/bash
+
+- name: check kubectl
+  become: yes
+  command: kubectl get nodes
+  register: getnodes
+- debug: msg="{{getnodes.stdout_lines}}"
+
+- name: find ip address for LB
+  set_fact:
+    metallb_ip: "{{ additional_nic.ens4.addresses[0] | ipaddr('address') }}"
+- debug: msg="going to use this bridged IP for a loadbalancer: {{metallb_ip}}"
+
+- name: Enable metallb with address
+  become: yes
+  command: "microk8s.enable metallb {{metallb_ip}}-{{metallb_ip}}"
+  register: command_result
+  changed_when: "'Addon metallb is already enabled' not in command_result.stdout"
+  when: microk8s_plugin_metallb_enable
+
+- name: create file out of every jinja2 templates
+  template:
+    src: "{{item}}"
+    dest: "{{TMPDIR}}/{{ item | basename | regex_replace('.j2$', '') }}"
+  with_fileglob: "../templates/*.j2"
+
+- name: apply metalLB service
+  shell: kubectl apply -f {{TMPDIR}}/metallb-ingress-service.yaml
+  become: yes
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+

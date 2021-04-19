@@ -1,0 +1,30 @@
+---
+microk8s_version: "1.20/stable"
+
+# on Ubuntu focal, throws error on first run, so skipping
+microk8s_plugin_helm3_enable: false
+# false for virtualbox vm, where creating 'lo:microk8s' static IP will hang
+microk8s_plugin_host_access_enable: false
+
+# configure these users: group, permissions, ~/.kube/config
+users: ['ubuntu'] # fabian for virtualbox, ubuntu for kvm/libvirt
+
+# for SAN certificate with custom CA
+cert_CA: myCA.local
+cert_domains_primary_ingress: ['microk8s.local','microk8s-alt.local']
+cert_domains_secondary_ingress: ['microk8s-secondary.local']
+#cert_overwrite: yes
+#tls_secret_overwrite: true
+
+# content that needs to go into netplan of first master
+additional_nic:
+  ens4:
+    addresses:
+    - 192.168.2.141/24
+    dhcp4: false
+    gateway4: 192.168.2.1
+    nameservers:
+      addresses:
+      - 192.168.2.1
+      search:
+      - home.lab
