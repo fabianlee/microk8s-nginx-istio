@@ -11,7 +11,7 @@ spec:
   type: LoadBalancer
   # loadBalancerIP is optional. MetalLB will automatically allocate an IP 
   # from its pool if not specified. You can also specify one manually.
-  # loadBalancerIP: x.y.z.a
+  loadBalancerIP: "{{ additional_nic.ens4.addresses[0] | ipaddr('address') }}"
   ports:
     - name: http
       protocol: TCP

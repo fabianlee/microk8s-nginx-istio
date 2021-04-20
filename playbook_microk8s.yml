@@ -20,7 +20,6 @@
     #- role: microk8s-get-kubeconfig
     #- role: kubectl-proxy
     #- role: kubernetes-dashboard-rbac
-    #- role: additional-netplan-ip
     #- role: reapply-tls-secrets
     #- role: nginx-ingress
 

@@ -13,7 +13,7 @@ spec:
     secretName: tls-credential
   rules:
 
-  - host: microk8s-1.local
+  - host: {{ cert_domains_primary_ingress | first }}
     http:
       paths:
       - pathType: Prefix #Exact
@@ -22,5 +22,5 @@ spec:
           service:
             name: nginx-service
             port:
-              number: 80
+              number: 8080
 

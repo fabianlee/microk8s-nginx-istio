@@ -29,5 +29,8 @@
   shell: kubectl apply -f {{TMPDIR}}/tiny-tools.yaml
   become: yes
   register: stdout
+  retries: 3
+  delay: 10
+  until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"
 
