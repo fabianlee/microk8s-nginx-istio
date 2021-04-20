@@ -31,6 +31,9 @@
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
 
+- debug: msg="from inside pod, curl 8080"
+- debug: msg="from tiny-tools, curl hello-app-v1-service.hello-app-ns.svc.cluster.local:8080"
+
 - name: kubectl to get hello-app-v1-service URL
   command: |
     kubectl get service hello-app-v1-service -n hello-app-ns --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}'
@@ -41,6 +44,7 @@
   uri:
     url: "{{url_from_service.stdout}}"
     method: GET
+    follow_redirects: all
     return_content: true
   register: pull_result
 - debug: msg="{{pull_result.content}}"
@@ -48,13 +52,15 @@
 
 
 - name: kubectl to get insecure nginx ingress controller service URL
+    #kubectl get service ingress-nginx-controller -n ingress-nginx --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}'
   command: |
-    kubectl get service ingress-nginx-controller -n ingress-nginx --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}'
+    kubectl get service ingress -n ingress --output jsonpath='http://{.spec.clusterIP}:{.spec.ports[?(@.name=="http")].port}'
   register: http_ingress
 - debug: msg="{{http_ingress.stdout}}"
 - name: kubectl to get secure nginx ingress controller service URL
+    #kubectl get service ingress-nginx-controller -n ingress-nginx --output jsonpath='https://{.spec.clusterIP}:{.spec.ports[?(@.name=="https")].port}'
   command: |
-    kubectl get service ingress-nginx-controller -n ingress-nginx --output jsonpath='https://{.spec.clusterIP}:{.spec.ports[?(@.name=="https")].port}'
+    kubectl get service ingress -n ingress --output jsonpath='https://{.spec.clusterIP}:{.spec.ports[?(@.name=="https")].port}'
   register: https_ingress
 - debug: msg="{{https_ingress.stdout}}"
 

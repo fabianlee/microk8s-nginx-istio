@@ -15,12 +15,17 @@
     - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt"
     - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key"
 
+- name: make sure namespace exist
+  command: kubectl create ns {{item}}
+  register: result
+  failed_when: not result.rc in [0,1]
+  loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
 
 - name: delete tls secret when tls_secret_overwrite set to yes
   command: kubectl delete -n {{item}} secret tls-credential
-  become: yes
+  register: result
+  failed_when: not result.rc in [0,1]
   loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
-
 
 - name: create tls secret
   command: kubectl create -n {{item}} secret tls tls-credential --key={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key --cert={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt

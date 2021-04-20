@@ -5,8 +5,8 @@ microk8s_version: "1.20/stable"
 microk8s_plugin_helm3_enable: false
 # false for virtualbox vm, where creating 'lo:microk8s' static IP will hang
 microk8s_plugin_host_access_enable: false
-# true for metal LB software LB
-microk8s_plugin_metallb_enable: true
+# do not enable metal LB until additional IP is added
+microk8s_plugin_metallb_enable: false
 
 # configure these users: group, permissions, ~/.kube/config
 users: ['ubuntu'] # 'fabian' for virtualbox, 'ubuntu' for kvm/libvirt

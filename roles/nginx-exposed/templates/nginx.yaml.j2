@@ -1,10 +1,11 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: nginx-ns
-  labels:
-    istio.io/rev: {{ istio_version | replace('.','-') }}
+# not going to auto-inject envoy proxy in this namespace
+#---
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: nginx-ns
+#  labels:
+#    istio.io/rev: {{ istio_version | replace('.','-') }}
 ---
 apiVersion: v1
 kind: Service

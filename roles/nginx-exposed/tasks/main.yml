@@ -26,7 +26,7 @@
 - debug: msg="{{stdout.stdout_lines}}"
 
 - name: apply nginx virtualservice
-  shell: kubectl apply -f {{TMPDIR}}/nginx-on-nginx-ingress.yaml.j2
+  shell: kubectl apply -f {{TMPDIR}}/nginx-on-nginx-ingress.yaml
   become: yes
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"

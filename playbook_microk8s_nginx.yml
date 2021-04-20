@@ -5,11 +5,12 @@
   become: yes
 
   vars:
+    istio_version: 1.7.5
 
   roles:
+    #- role: nginx-ingress
     - role: nginx-exposed
-    - role: nginx-ingress
+    #- role: hello-app-with-nginx-ingress
 
     #- role: istio-operator
     #- role: istio-gateway
-    #- role: hello-app-with-nginx-ingress
