@@ -9,6 +9,7 @@
 
   # these roles only need to be applied to first node in cluster
   roles:
+    - role: wait-for-microk8s
     - role: additional-netplan-ip
     - role: metallb-service
     - role: cert-with-ca

@@ -17,6 +17,7 @@ spec:
     metadata:
       labels:
         app: tiny-tools
+      # avoid istio envy project if being auto-injected
       annotations:
         sidecar.istio.io/inject: "false"
     spec:

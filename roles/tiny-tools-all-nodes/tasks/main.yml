@@ -30,7 +30,7 @@
   become: yes
   register: stdout
   retries: 3
-  delay: 10
+  delay: 15
   until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"
 

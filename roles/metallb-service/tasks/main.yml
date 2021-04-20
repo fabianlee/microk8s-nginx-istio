@@ -28,10 +28,18 @@
 
 - name: Enable metallb with address
   become: yes
-  command: "microk8s.enable metallb {{metallb_ip}}-{{metallb_ip}}"
+  command: "microk8s enable metallb {{metallb_ip}}-{{metallb_ip}}"
   register: command_result
   changed_when: "'Addon metallb is already enabled' not in command_result.stdout"
-  when: microk8s_plugin_metallb_enable
+
+- pause:
+    seconds: 15
+
+- name: Wait for microk8s to be ready
+  become: yes
+  command: microk8s.status --wait-ready
+  retries: 3
+  delay: 15
 
 - name: create file out of every jinja2 templates
   template:
@@ -39,7 +47,7 @@
     dest: "{{TMPDIR}}/{{ item | basename | regex_replace('.j2$', '') }}"
   with_fileglob: "../templates/*.j2"
 
-- name: apply metalLB service
+- name: apply metalLB service with specific IP
   shell: kubectl apply -f {{TMPDIR}}/metallb-ingress-service.yaml
   become: yes
   register: stdout
