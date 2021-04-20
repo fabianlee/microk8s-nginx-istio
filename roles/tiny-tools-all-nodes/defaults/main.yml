@@ -1,2 +1,1 @@
 TMPDIR: "{{ lookup('env','TMPDIR') | default('/tmp',true)  }}"
-microk8s_plugin_metallb_enable: true

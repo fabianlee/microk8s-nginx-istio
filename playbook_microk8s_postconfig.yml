@@ -1,0 +1,28 @@
+---
+
+- hosts: microk8s
+  gather_facts: yes
+  become: yes
+
+  # most vars are coming from 'group_vars/' directory
+  vars:
+
+  # these roles only need to be applied to first node in cluster
+  roles:
+    #- role: additional-netplan-ip
+    #- role: metallb-service
+    #- role: cert-with-ca
+    #- role: reapply-tls-secrets
+
+    # fetch kubeconfig locally
+    #- role: microk8s-get-kubeconfig
+    # apply tiny-tools on each node to assist in troubleshooting
+    - role: tiny-tools-all-nodes
+
+    #- role: kubectl-proxy
+    #- role: kubernetes-dashboard-rbac
+    #- role: nginx-ingress
+
+    #- role: istio-operator
+    #- role: istio-gateway
+    #- role: hello-app-with-nginx-ingress

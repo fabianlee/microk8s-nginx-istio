@@ -1,0 +1,20 @@
+---
+# for SAN certificate with custom CA
+cert_CA: myCA.local
+cert_domains_primary_ingress: ['microk8s.local','microk8s-alt.local']
+cert_domains_secondary_ingress: ['microk8s-secondary.local']
+#cert_overwrite: yes
+#tls_secret_overwrite: true
+
+# content that needs to go into netplan of first master
+additional_nic:
+  ens4:
+    addresses:
+    - 192.168.2.141/24
+    dhcp4: false
+    gateway4: 192.168.2.1
+    nameservers:
+      addresses:
+      - 192.168.2.1
+      search:
+      - home.lab
