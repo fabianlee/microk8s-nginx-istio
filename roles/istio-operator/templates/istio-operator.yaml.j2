@@ -12,7 +12,7 @@ metadata:
 
 spec:
   profile: default
-  revision: {{ istio_version | replace('.','-') }}
+  revision: "{{ istio_version | replace('.','-') }}"
 
   addonComponents:
     kiali:

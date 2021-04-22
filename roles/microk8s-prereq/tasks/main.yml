@@ -1,11 +1,44 @@
 ---
 
-- name: install list of packages
+- name: OS swappiness
+  sysctl:
+    name: vm.swappiness
+    value: '5'
+    sysctl_set: true
+    state: present
+
+- name: IPv4 forward
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+    state: present
+    reload: yes
+
+- name: install list of packages, debian based
   apt:
     pkg:
     - net-tools # netstat
     - jq # json tool
+    - vim
+    - curl
+    - whois
+    - zip
+    - unzip
+    - ntpdate
+    - python3
+    - python3-pip
+    - python3-setuptools
     state: present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: install list of packages, RHEL
+  yum:
+    name:
+    - net-tools # netstat
+    - jq # json tool
+    state: present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
 - name: soft limit for nofile
   pam_limits:
@@ -31,3 +64,23 @@
     replace: '#\1\2\3swap\4'
     backup: yes
 
+- name: update editor preferences, Ubuntu
+  command: /usr/bin/update-alternatives --set editor /usr/bin/vim.basic
+  register: command_result
+  changed_when: "command_result.stdout != ''"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+#- debug: msg="{{command_result}}"
+
+- name: update python preferences, Ubuntu
+  command: update-alternatives --install /usr/bin/python python /usr/bin/python3 20
+  register: command_result
+  changed_when: "command_result.stdout != ''"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+#- debug: msg="{{command_result}}"
+
+- name: vimrc skeleton
+  copy:
+    dest: /etc/skel/.vimrc
+    content: |
+      colorscheme desert
+      syntax on

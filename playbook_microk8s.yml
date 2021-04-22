@@ -12,6 +12,6 @@
   # these roles will be applied to each vm in cluster
   roles:
     - role: microk8s-prereq
-    - role: ansible_role_microk8s
-    - role: k9s
-    - role: helm3
+    #- role: ansible_role_microk8s
+    #- role: k9s
+    #- role: helm3
