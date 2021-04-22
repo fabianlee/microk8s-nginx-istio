@@ -46,7 +46,6 @@
   until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"
 
-
 - name: apply deployment /golang-hello-world-web2
   shell: kubectl apply -f {{TMPDIR}}/golang-hello-world-web2.yaml
   become: yes
