@@ -21,10 +21,10 @@
     limit_item: nofile
     value: "{{ limit_nofile | int }}"
 
-- name: Disable swapoff
+- name: set swapoff
   shell: swapoff -a
 
-- name: Disable swapoff permanently
+- name: set swapoff permanently
   replace:
     path: /etc/fstab
     regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'

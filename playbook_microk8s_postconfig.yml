@@ -10,8 +10,13 @@
   # these roles only need to be applied to first node in cluster
   roles:
     - role: wait-for-microk8s
+
+    # assign additional IP, have metal LB use it
     - role: additional-netplan-ip
     - role: metallb-service
+
+    # create CA and cert, apply to namespaces
+    # also fetched locally to /tmp
     - role: cert-with-ca
     - role: reapply-tls-secrets
 
@@ -19,13 +24,3 @@
     - role: microk8s-get-kubeconfig
     # apply tiny-tools on each node to assist in troubleshooting
     - role: tiny-tools-all-nodes
-
-
-
-    #- role: kubectl-proxy
-    #- role: kubernetes-dashboard-rbac
-    #- role: nginx-ingress
-
-    #- role: istio-operator
-    #- role: istio-gateway
-    #- role: hello-app-with-nginx-ingress

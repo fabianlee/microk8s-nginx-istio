@@ -5,13 +5,9 @@
   become: yes
 
   vars:
-    #istio_version: 1.7.5
 
   roles:
-    # my debug web server
     - role: golang-hello-world-web
 
-    # nginx deployment with ConfigMap content on ngnix ingress
-    #- role: nginx-exposed
     # google sample hello app on nginx ingress
     #- role: hello-app-with-nginx-ingress
