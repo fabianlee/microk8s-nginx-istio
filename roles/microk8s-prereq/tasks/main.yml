@@ -26,9 +26,9 @@
     - zip
     - unzip
     - ntpdate
-    - python3
-    - python3-pip
-    - python3-setuptools
+    #- python3
+    #- python3-pip
+    #- python3-setuptools
     state: present
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
@@ -37,6 +37,7 @@
     name:
     - net-tools # netstat
     - jq # json tool
+    - vim
     state: present
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
@@ -71,11 +72,11 @@
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 #- debug: msg="{{command_result}}"
 
-- name: update python preferences, Ubuntu
-  command: update-alternatives --install /usr/bin/python python /usr/bin/python3 20
-  register: command_result
-  changed_when: "command_result.stdout != ''"
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+#- name: update python preferences, Ubuntu
+#  command: update-alternatives --install /usr/bin/python python /usr/bin/python3 20
+#  register: command_result
+#  changed_when: "command_result.stdout != ''"
+#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 #- debug: msg="{{command_result}}"
 
 - name: vimrc skeleton

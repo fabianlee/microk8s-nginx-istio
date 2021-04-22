@@ -124,12 +124,20 @@ resource "libvirt_domain" "domain-ubuntu" {
        network_name = "default"
   }
 
-  # only give additional LoadBalancer NIC to first host
+  # (primary ingress) give additional LoadBalancer NIC to first host
   dynamic "network_interface" {
     for_each = index(keys(local.microk8s),each.key)==0 ? [1] : []
     content {
      network_name = "host-bridge"
      addresses = ["192.168.2.141"]
+    }
+  }
+  # (secondary ingress) give additional LoadBalancer NIC to first host
+  dynamic "network_interface" {
+    for_each = index(keys(local.microk8s),each.key)==0 ? [1] : []
+    content {
+     network_name = "host-bridge"
+     addresses = ["192.168.2.142"]
     }
   }
 
