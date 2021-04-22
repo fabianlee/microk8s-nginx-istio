@@ -20,15 +20,21 @@
     - python-netaddr # for ipaddr jinja2 filter used below
     state: present
 
-- name: find ip address for LB
+- name: find ip address1 for LB
   set_fact:
-    metallb_ip: "{{ additional_nic.ens4.addresses[0] | ipaddr('address') }}"
+    metallb_ip1: "{{ additional_nic[0].netplan.addresses[0] | ipaddr('address') }}"
 - debug: 
-    msg: "going to use this bridged IP for a loadbalancer: {{metallb_ip}}"
+    msg: "going to use this bridged IP for a loadbalancer: {{metallb_ip1}}"
+
+- name: find ip address2 for LB
+  set_fact:
+    metallb_ip2: "{{ additional_nic[1].netplan.addresses[0] | ipaddr('address') }}"
+- debug: 
+    msg: "going to use this bridged IP for a loadbalancer: {{metallb_ip2}}"
 
 - name: Enable metallb with address
   become: yes
-  command: "microk8s enable metallb {{metallb_ip}}-{{metallb_ip}}"
+  command: "microk8s enable metallb {{metallb_ip1}}-{{metallb_ip2}}"
   register: command_result
   changed_when: "'Addon metallb is already enabled' not in command_result.stdout"
 

@@ -8,12 +8,13 @@ metadata:
     kubernetes.io/ingress.class: public # was 'nginx' before microk8s 1.20
 spec:
   tls:
-  - hosts: {{ cert_domains_secondary_ingress | to_json }}
+  - hosts:
+    -  "{{ cert_domains_primary_ingress | last }}"
     # secret must be in same namespace
     secretName: tls-credential
   rules:
 
-  - host: {{ cert_domains_secondary_ingress | first }}
+  - host: {{ cert_domains_primary_ingress | last }}
     http:
       paths:
       - pathType: Prefix #Exact

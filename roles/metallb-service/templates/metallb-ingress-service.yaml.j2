@@ -1,5 +1,4 @@
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,7 +10,30 @@ spec:
   type: LoadBalancer
   # loadBalancerIP is optional. MetalLB will automatically allocate an IP 
   # from its pool if not specified. You can also specify one manually.
-  loadBalancerIP: "{{ additional_nic.ens4.addresses[0] | ipaddr('address') }}"
+  loadBalancerIP: "{{ additional_nic[0].netplan.addresses[0] | ipaddr('address') }}"
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-secondary
+  namespace: ingress
+spec:
+  selector:
+    name: nginx-ingress-microk8s-secondary
+  type: LoadBalancer
+  # loadBalancerIP is optional. MetalLB will automatically allocate an IP 
+  # from its pool if not specified. You can also specify one manually.
+  loadBalancerIP: "{{ additional_nic[1].netplan.addresses[0] | ipaddr('address') }}"
   ports:
     - name: http
       protocol: TCP

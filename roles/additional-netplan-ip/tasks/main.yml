@@ -5,4 +5,3 @@
 - name: apply netplan
   import_tasks: netplan.yml
   when: "'metalLB' in group_names"
-  #when: group_names is search('metalLB')

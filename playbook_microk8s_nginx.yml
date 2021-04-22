@@ -8,7 +8,4 @@
 
   roles:
     - role: golang-hello-world-web
-    - role: python-hello-world-web
-
-    # google sample hello app on nginx ingress
-    #- role: hello-app-with-nginx-ingress
+    #- role: python-hello-world-web
