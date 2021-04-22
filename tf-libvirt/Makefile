@@ -2,13 +2,13 @@ THISDIR := $(notdir $(CURDIR))
 PROJECT := $(THISDIR)
 TF := terraform14
 
-init: create-keypair
-	# skips init if .terraform directory already exists
-	[ -d .$(TF) ] || $(TF) init
-
 apply: init 
 	$(TF) apply -auto-approve
 	$(TF) output
+
+init: create-keypair
+	# skips init if .terraform directory already exists
+	[ -d .$(TF) ] || $(TF) init
 
 destroy:
 	$(TF) destroy -force -auto-approve

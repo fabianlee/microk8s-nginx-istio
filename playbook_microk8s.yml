@@ -1,5 +1,4 @@
 ---
-# ansible-playbook playbook_microk8s.yml
 
 - hosts: microk8s_HA
   gather_facts: yes
@@ -8,21 +7,10 @@
   # most vars are coming from 'group_vars/' directory
   vars:
     # set to true if more than one host in microk8s_HA group
-    microk8s_enable_HA: false
+    microk8s_enable_HA: true
 
   # these roles will be applied to each vm in cluster
   roles:
     - role: microk8s-prereq
     - role: ansible_role_microk8s
     - role: k9s
-
-    #- role: cert-with-ca
-    #- role: microk8s-get-kubeconfig
-    #- role: kubectl-proxy
-    #- role: kubernetes-dashboard-rbac
-    #- role: reapply-tls-secrets
-    #- role: nginx-ingress
-
-    #- role: istio-operator
-    #- role: istio-gateway
-    #- role: hello-app-with-nginx-ingress

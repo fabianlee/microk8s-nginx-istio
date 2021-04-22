@@ -45,3 +45,16 @@
   delay: 15
   until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"
+
+
+- name: apply deployment /golang-hello-world-web2
+  shell: kubectl apply -f {{TMPDIR}}/golang-hello-world-web2.yaml
+  become: yes
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+
+- name: apply nginx ingress to golang-hello-world-web2
+  shell: kubectl apply -f {{TMPDIR}}/golang-hello-world-web-on-nginx2.yaml
+  become: yes
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
