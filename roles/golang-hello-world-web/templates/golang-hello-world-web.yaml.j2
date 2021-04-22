@@ -1,4 +1,22 @@
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golang-hello-world-web-service
+  #namespace: default
+  labels:
+    app: golang-hello-world-web
+spec:
+  ports:
+  # port=available to other containers
+  - port: 8080
+    name: http
+    # targetPort=exposed from inside container
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: golang-hello-world-web
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,15 +29,17 @@ spec:
   selector:
     matchLabels:
       app: golang-hello-world-web
-  # kubectl scale --replicas=x deployment/tiny-tools
+  # kubectl scale --replicas=x deployment/golang-hello-world-web
   replicas: 1
   template:
     metadata:
       labels:
         app: golang-hello-world-web
+      # skip any istio auto-injection
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
+
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -30,24 +50,18 @@ spec:
                 values:
                 - golang-hello-world-web
             topologyKey: "kubernetes.io/hostname"
+
       containers:
       - name: golang-hello-world-web
         image: fabianlee/docker-golang-hello-world-web:1.0.0
-        #args:
-        #- while true; do
-        #    echo -en '\n';
-        #    printenv MY_NODE_NAME MY_POD_NAME MY_POD_NAMESPACE;
-        #    printenv MY_POD_IP MY_POD_SERVICE_ACCOUNT;
-        #    sleep 10;
-        #    done;
         env:
 
         # default variables available to be overridden
         - name: APP_CONTEXT
-          # if set to /test/' would only deliver paths under that
-          value: /
+          # if set to /test/' would only deliver from that path
+          value: "/myhello/"
         - name: PORT
-          value: 8080
+          value: "8080"
 
         # Downward API support - inserts these into container as env variables
         # https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables
@@ -71,16 +85,19 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: spec.serviceAccountName
+
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8080
           initialDelaySeconds: 3
           periodSeconds: 3
+
         readinessProbe:
           httpGet:
             path: /healthz
             port: 8080
           initialDelaySeconds: 3
           periodSeconds: 3
+
       restartPolicy: Always

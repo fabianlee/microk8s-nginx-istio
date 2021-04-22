@@ -8,10 +8,11 @@
     istio_version: 1.7.5
 
   roles:
-    # I don't believe this is necessary at all, already supplied with microk8s ingress
+    # this is not necessary, already supplied with microk8s ingress
     #- role: nginx-ingress
 
     - role: nginx-exposed
+    - role: golang-hello-world-web
     #- role: hello-app-with-nginx-ingress
 
     #- role: istio-operator
