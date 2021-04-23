@@ -21,12 +21,12 @@
 
 - name: copy tiny-tools yaml to remote host
   copy:
-    src: tiny-tools.yaml
-    dest: "{{TMPDIR}}/tiny-tools.yaml"
+    src: tiny-tools-daemonset.yaml
+    dest: "{{TMPDIR}}/tiny-tools-daemonset.yaml"
     force: true
 
-- name: apply tiny-tools with single replica
-  shell: kubectl apply -f {{TMPDIR}}/tiny-tools.yaml
+- name: apply tiny-tools as daemonset
+  shell: kubectl apply -f {{TMPDIR}}/tiny-tools-daemonset.yaml
   become: yes
   register: stdout
   retries: 3
