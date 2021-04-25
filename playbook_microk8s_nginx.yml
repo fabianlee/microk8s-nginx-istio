@@ -7,5 +7,5 @@
   vars:
 
   roles:
-    - role: golang-hello-world-web
-    #- role: python-hello-world-web
+    #- role: golang-hello-world-web
+    - role: python-hello-world-web
