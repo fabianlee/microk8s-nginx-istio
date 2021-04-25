@@ -18,7 +18,7 @@
     # create CA and cert, apply to namespaces
     # also fetched locally to /tmp
     - role: cert-with-ca
-    - role: reapply-tls-secrets
+    #- role: reapply-tls-secrets
 
     # fetch kubeconfig locally
     - role: microk8s-get-kubeconfig
