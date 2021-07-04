@@ -1,6 +1,6 @@
 THISDIR := $(notdir $(CURDIR))
 PROJECT := $(THISDIR)
-TF := terraform14
+TF := terraform
 
 apply: init 
 	$(TF) apply -auto-approve
