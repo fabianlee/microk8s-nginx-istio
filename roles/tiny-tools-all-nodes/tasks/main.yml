@@ -17,7 +17,7 @@
   shell: kubectl get nodes | grep Ready | wc -l
   register: node_count
 - debug: 
-    msg: "total node count = {{node_count.stdout}}"
+    msg: "total k8s worker node count = {{node_count.stdout}}"
 
 - name: copy tiny-tools yaml to remote host
   copy:
