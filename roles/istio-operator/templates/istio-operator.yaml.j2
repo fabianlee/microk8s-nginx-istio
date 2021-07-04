@@ -14,6 +14,19 @@ spec:
   profile: default
   revision: "{{ istio_version | replace('.','-') }}"
 
+  # avoid rate limit on docker hub for istio envoy proxy
+  values:
+    global:
+      hub: grc.io/istio-release
+  #values:
+    #pilot:
+    #  hub: gcr.io/istio-release/pilot
+    # gcr.io only has single version, not the one we need
+    #prometheus:
+    #  hub: gcr.io/istio-release/prom/promethus
+    # only on quay
+    #kiali:
+    #  hub:
   addonComponents:
     kiali:
       enabled: false

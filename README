@@ -1,5 +1,22 @@
 # microk8s installation with nginx ingress and istio gateway
 
+Create infrastructure
+  * cd tf-libvirt
+  * make
+  * cd ..
+
+Then apply Ansible roles:
+  * ansible-playbook playbook_microk8s.yml
+  * ansible-playbook playbook_microk8s_postconfig.yml
+  * ansible-playbook
+  * ansible-playbook
+
+Validate locally:
+  * install k9s (https://github.com/derailed/k9s/releases)
+  * export KUBECONFIG=/tmp/microk8s-kubeconfig
+  * k9s
+
+
 Using this ansible role for main installation:
 https://github.com/istvano/ansible_role_microk8s.git
 

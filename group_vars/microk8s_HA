@@ -1,10 +1,15 @@
 ---
 microk8s_version: "1.20/stable"
 
+# wait for nginx enablement
+microk8s_plugin_ingress_enable: true
+
 # on Ubuntu focal, throws error on first run, so skipping
 microk8s_plugin_helm3_enable: false
+
 # false for virtualbox vm, where creating 'lo:microk8s' static IP will hang
 microk8s_plugin_host_access_enable: false
+
 # do not enable metal LB until additional IP is added
 microk8s_plugin_metallb_enable: false
 

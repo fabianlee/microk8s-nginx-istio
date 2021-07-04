@@ -22,5 +22,5 @@
 
     # fetch kubeconfig locally
     - role: microk8s-get-kubeconfig
-    # apply tiny-tools on each node to assist in troubleshooting
+    # apply tiny-tools daemonset to assist in troubleshooting
     - role: tiny-tools-all-nodes

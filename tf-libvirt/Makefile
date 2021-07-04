@@ -4,7 +4,6 @@ TF := terraform14
 
 apply: init 
 	$(TF) apply -auto-approve
-	$(TF) output
 
 init: create-keypair
 	# skips init if .terraform directory already exists

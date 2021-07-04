@@ -57,6 +57,9 @@
   shell: kubectl apply -f {{TMPDIR}}/metallb-ingress-service.yaml
   become: yes
   register: stdout
+  retries: 3
+  delay: 20
+  until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"
 
 - name: apply nginx ingress controller on secondary IP address
