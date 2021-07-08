@@ -1,0 +1,39 @@
+---
+
+# get latest ansible role for installing microk8s
+- hosts: localhost
+  become: no
+  tasks:
+    - name: get microk8s ansible role
+      delegate_to: localhost
+      git:
+        repo: https://github.com/istvano/ansible_role_microk8s.git
+        clone: true
+        dest: "{{playbook_dir}}/../ansible_role_microk8s"
+
+    - name: make collections directory
+      file:
+        path: "{{playbook_dir}}/../collections"
+        state: directory
+    - name: get community.kubernetes collection from ansible galaxy, be patient can take 5 minutes
+      command:
+        cmd: ansible-galaxy collection install community.kubernetes:1.2.1 -p .
+        creates: "{{playbook_dir}}/../collections/ansible_collections/community/kubernetes"
+        chdir: "{{playbook_dir}}/../collections"
+
+#    - name: update helm repos
+#      community.kubernetes.helm_repository:
+#      # works with 2.0.0
+#      #kubernetes.core.helm_repository:
+#        name: stable
+#        state: absent
+#        namespace: default
+#        repo_url: https://kubernetes.github.io/ingress-nginx
+#    - name: Ensure the myapp Namespace exists.
+#      # works with 1.2.1
+#      community.kubernetes.k8s:
+#        api_version: v1
+#        kind: Namespace
+#        name: myapp
+#        state: present
+#

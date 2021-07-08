@@ -8,4 +8,4 @@
 
   roles:
     #- role: golang-hello-world-web
-    - role: python-hello-world-web
+    - python-hello-world-web

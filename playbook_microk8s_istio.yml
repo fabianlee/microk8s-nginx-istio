@@ -10,19 +10,19 @@
     istio_ingress_tested_from_localhost: true
 
   roles:
-    #- role: additional-netplan-ip
-    #- role: microk8s-prereq
-    #- role: ansible_role_microk8s
-    #- role: microk8s-get-kubeconfig
-    #- role: k9s
-    #- role: kubectl-proxy
-    #- role: kubernetes-dashboard-rbac
+    #- additional-netplan-ip
+    #- microk8s-prereq
+    #- ansible_role_microk8s
+    #- microk8s-get-kubeconfig
+    #- k9s
+    #- kubectl-proxy
+    #- kubernetes-dashboard-rbac
 
-    #- role: cert-with-ca
-    #- role: reapply-tls-secrets
+    #- cert-with-ca
+    #- reapply-tls-secrets
 
-    #- role: nginx-ingress
+    #- nginx-ingress
 
-    - role: istio-operator
-    - role: istio-gateway
-    #- role: hello-app-with-nginx-ingress
+    - istio-operator
+    - istio-gateway
+    #- hello-app-with-nginx-ingress

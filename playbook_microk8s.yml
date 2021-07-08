@@ -1,17 +1,20 @@
 ---
 
+# deploy microk8s
 - hosts: microk8s_HA
   gather_facts: yes
   become: yes
-
-  # most vars are coming from 'group_vars/' directory
   vars:
-    # set to true if more than one host in microk8s_HA group
     microk8s_enable_HA: true
 
-  # these roles will be applied to each vm in cluster
   roles:
-    - role: microk8s-prereq
-    - role: ansible_role_microk8s
-    - role: k9s
-    - role: helm3
+    - microk8s-prereq
+    - ansible_role_microk8s
+    - k9s
+
+# fetch kubeconfig locally for convenience
+- hosts: microk8s
+  gather_facts: no
+  become: yes
+  roles:
+    - microk8s-get-kubeconfig-local

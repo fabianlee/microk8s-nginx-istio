@@ -1,5 +1,5 @@
 ---
-microk8s_version: "1.20/stable"
+microk8s_version: "1.21/stable"
 
 # wait for nginx enablement
 microk8s_plugin_ingress_enable: true
@@ -13,6 +13,6 @@ microk8s_plugin_host_access_enable: false
 # do not enable metal LB until additional IP is added
 microk8s_plugin_metallb_enable: false
 
-# configure these users: group, permissions, ~/.kube/config
+# configure these users with proper: group, permissions, ~/.kube/config
 users: ['ubuntu'] # 'fabian' for virtualbox, 'ubuntu' for kvm/libvirt
 

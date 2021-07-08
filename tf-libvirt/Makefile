@@ -10,7 +10,7 @@ init: create-keypair
 	[ -d .$(TF) ] || $(TF) init
 
 destroy:
-	$(TF) destroy -force -auto-approve
+	$(TF) destroy -auto-approve
 	./clean-known-hosts.sh
 	#rm terraform.tfstate*
 

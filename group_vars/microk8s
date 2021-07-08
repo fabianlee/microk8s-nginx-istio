@@ -31,23 +31,3 @@ additional_nic:
         search:
         - home.lab
 
-#  ens4:
-#    addresses:
-#    - 192.168.2.141/24
-#    dhcp4: false
-#    gateway4: 192.168.2.1
-#    nameservers:
-#      addresses:
-#      - 192.168.2.1
-#      search:
-#      - home.lab
-#  ens5:
-#    addresses:
-#    - 192.168.2.142/24
-#    dhcp4: false
-#    gateway4: 192.168.2.1
-#    nameservers:
-#      addresses:
-#      - 192.168.2.1
-#      search:
-#      - home.lab

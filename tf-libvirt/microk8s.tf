@@ -1,9 +1,3 @@
-# variables that can be overriden in terraform.tfvars
-variable "password" { default="linux" }
-variable "dns_domain" { default="fabian.lee"  }
-variable "ip_type" { default = "static" } # dhcp is other valid type
-variable "prefixIP" { default = "192.168.122" }
-variable "diskPool" { default = "default" }
 
 # list of hosts to be created, use 'for_each' on relevant resources
 locals {
@@ -13,25 +7,6 @@ locals {
     "microk8s-3" = { os_code_name = "focal", octetIP = "212", vcpu=4, memoryMB=1024*4, incGB=60 },
   }
 }
-
-# new location for plugin binary
-# ~/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/0.6.2/linux_amd64
-# https://github.com/dmacvicar/terraform-provider-libvirt/blob/master/docs/migration-13.md
-terraform { 
-  required_version = ">= 0.14"
-  required_providers {
-    libvirt = {
-      source = "dmacvicar/libvirt"
-      version = "0.6.2"
-    }
-  }
-}
-
-# instance of the provider
-provider "libvirt" {
-  uri = "qemu:///system"
-}
-
 
 # fetch the latest ubuntu release image from their mirrors
 resource "libvirt_volume" "os_image" {
