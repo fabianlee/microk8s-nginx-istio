@@ -1,0 +1,27 @@
+---
+# https://www.terraform.io/docs/cli/install/apt.html
+
+- name: is hashicorp key already loaded into keyring
+  command: apt-key list --list-signatures
+  register: hashicorp_signatures
+
+- name: get hashicorp key
+  shell: curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  when: not 'DA418C88A3219F7B' in hashicorp_signatures.stdout and not apt_proxy is defined
+
+- name: add hashicorp repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ansible_lsb.codename|lower}} main"
+    state: present
+    filename: hashicorp
+    update_cache: yes
+    mode: 0644
+    #validate_certs: no
+
+- name: install terraform package
+  package:
+    name:
+      - terraform
+    state: present
+    update_cache: yes
+
