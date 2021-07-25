@@ -1,0 +1,35 @@
+---
+
+- name: create kubectl config
+  become: yes
+  changed_when: true
+  shell: microk8s config > ~/.kube/config
+  args:
+    executable: /bin/bash
+
+- name: check kubectl
+  become: yes
+  command: kubectl get nodes
+  register: getnodes
+- debug: msg="{{getnodes.stdout_lines}}"
+
+- name: Wait for microk8s to be ready
+  become: yes
+  command: microk8s.status --wait-ready
+  retries: 3
+  delay: 15
+
+- name: create file out of every jinja2 template
+  template:
+    src: "{{item}}"
+    dest: "{{TMPDIR}}/{{ item | basename | regex_replace('.j2$', '') }}"
+  with_fileglob: "../templates/*.j2"
+
+- name: creates secondary nginx ingress controller, microk8s 'ingress' Add-on already created first one
+  shell: kubectl apply -f {{TMPDIR}}/nginx-ingress-private-microk8s-controller.yaml
+  become: yes
+  register: stdout
+- debug: msg="{{stdout.stdout_lines}}"
+
+
+

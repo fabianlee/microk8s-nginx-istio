@@ -10,6 +10,7 @@
   # these roles only need to be applied to first node in cluster
   roles:
     - wait-for-microk8s
+    - tiny-tools-all-nodes
 
     # assign additional IP, have metal LB use it
     - additional-netplan-ip
@@ -20,7 +21,3 @@
     - cert-with-ca
     #- role: reapply-tls-secrets
 
-    # fetch kubeconfig locally
-    - microk8s-get-kubeconfig-local
-    # apply tiny-tools daemonset to assist in troubleshooting
-    - tiny-tools-all-nodes
