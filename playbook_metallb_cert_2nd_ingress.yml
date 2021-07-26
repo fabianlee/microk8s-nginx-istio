@@ -10,8 +10,6 @@
   # these roles only need to be applied to first node in cluster
   roles:
     - wait-for-microk8s
-    # TODO remove
-    - tiny-tools-all-nodes
 
     # create custom CA and cert for TLS
     # certs also slurped locally to /tmp

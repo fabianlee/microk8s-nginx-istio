@@ -1,6 +1,5 @@
 ---
 
-# deploy microk8s
 - hosts: microk8s_HA
   gather_facts: yes
   become: yes
@@ -10,15 +9,15 @@
   roles:
     - microk8s-prereq
     - ansible_role_microk8s
+    # GUI utility for kubernetes
     - k9s
 
-# fetch kubeconfig locally for convenience
 - hosts: microk8s
   gather_facts: no
   become: yes
   roles:
     - wait-for-microk8s
+    # fetch kubeconfig locally for convenience
     - microk8s-get-kubeconfig-local
-
     # tiny-tools daemonset for troubleshooting
     - tiny-tools-all-nodes
