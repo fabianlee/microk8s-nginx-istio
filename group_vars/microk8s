@@ -7,27 +7,28 @@ cert_domains_secondary_ingress: ['microk8s-secondary.local']
 #tls_secret_overwrite: true
 
 # content that needs to go into netplan of first master
+# these NIC should be peers of the host (e.g. 192.168.1.0/24)
 additional_nic:
   - id: ens4
     netplan:
       addresses:
-      - 192.168.1.141/24
+      - 192.168.2.141/24
       dhcp4: false
-      gateway4: 192.168.1.1
+      gateway4: 192.168.2.1
       nameservers:
         addresses:
-        - 192.168.1.1
+        - 192.168.2.1
         search:
         - home.lab
   - id: ens5
     netplan: 
       addresses:
-      - 192.168.1.142/24
+      - 192.168.2.142/24
       dhcp4: false
-      gateway4: 192.168.1.1
+      gateway4: 192.168.2.1
       nameservers:
         addresses:
-        - 192.168.1.1
+        - 192.168.2.1
         search:
         - home.lab
 
