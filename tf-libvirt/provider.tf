@@ -1,6 +1,4 @@
-# new location for plugin binary
-# ~/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/0.6.2/linux_amd64
-# https://github.com/dmacvicar/terraform-provider-libvirt/blob/master/docs/migration-13.md
+# https://fabianlee.org/2021/07/05/kvm-installing-terraform-and-the-libvirt-provider-for-local-kvm-resources/
 terraform {
   required_version = ">= 0.14"
   required_providers {
