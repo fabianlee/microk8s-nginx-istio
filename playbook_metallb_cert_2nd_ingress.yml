@@ -15,13 +15,12 @@
     # certs also slurped locally to /tmp
     - cert-with-ca
 
-    # assign additional IP, then have metalLB use them
-    - additional-netplan-ip
+    # assign MetalLB the use of the additional NIC on microk8s-1
     - metallb-service
 
-    # microk8s 'ingress' add-on aleady creates primary nginx ingress controller
-    # add a second one for use by the secondary metalLB IP
+    # microk8s 'ingress' Add-on aleady creates primary nginx ingress controller
     # https://microk8s.io/docs/addon-ingress
+    # Now add a second ingress controller for use by the secondary MetalLB IP
     - add_secondary_ingress
 
 

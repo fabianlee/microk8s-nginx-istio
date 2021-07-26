@@ -3,8 +3,8 @@
 locals {
   microk8s = {
     "microk8s-1" = { os_code_name = "focal", octetIP = "210", vcpu=4, memoryMB=1024*12, incGB=60 },
-    "microk8s-2" = { os_code_name = "focal", octetIP = "211", vcpu=4, memoryMB=1024*4, incGB=60 },
-    "microk8s-3" = { os_code_name = "focal", octetIP = "212", vcpu=4, memoryMB=1024*4, incGB=60 },
+    #"microk8s-2" = { os_code_name = "focal", octetIP = "211", vcpu=4, memoryMB=1024*4, incGB=60 },
+    #"microk8s-3" = { os_code_name = "focal", octetIP = "212", vcpu=4, memoryMB=1024*4, incGB=60 },
   }
 }
 

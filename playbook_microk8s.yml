@@ -21,3 +21,5 @@
     - microk8s-get-kubeconfig-local
     # tiny-tools daemonset for troubleshooting
     - tiny-tools-all-nodes
+    # configure additional IP to be used by MetalLB endpoints
+    - additional-netplan-ip
