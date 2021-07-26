@@ -10,14 +10,20 @@
   # these roles only need to be applied to first node in cluster
   roles:
     - wait-for-microk8s
+    # TODO remove
     - tiny-tools-all-nodes
 
-    # assign additional IP, have metal LB use it
+    # create custom CA and cert for TLS
+    # certs also slurped locally to /tmp
+    - cert-with-ca
+
+    # assign additional IP, then have metalLB use them
     - additional-netplan-ip
     - metallb-service
 
-    # create CA and cert, apply to namespaces
-    # also fetched locally to /tmp
-    - cert-with-ca
-    #- role: reapply-tls-secrets
+    # microk8s 'ingress' add-on aleady creates primary nginx ingress controller
+    # add a second one for use by the secondary metalLB IP
+    # https://microk8s.io/docs/addon-ingress
+    - add_secondary_ingress
+
 

@@ -13,12 +13,13 @@
   register: getnodes
 - debug: msg="{{getnodes.stdout_lines}}"
 
-- name: install local packages needed for ipaddr jinja2 filter
-  delegate_to: localhost
-  apt:
-    pkg:
-    - python-netaddr # for ipaddr jinja2 filter used below
-    state: present
+# now done in 'playbook_get_dependencies.yml'
+#- name: install local packages needed for ipaddr jinja2 filter
+#  delegate_to: localhost
+#  apt:
+#    pkg:
+#    - python-netaddr # for ipaddr jinja2 filter used below
+#    state: present
 
 - name: find ip address1 for LB
   set_fact:
