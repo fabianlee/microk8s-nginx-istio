@@ -26,7 +26,7 @@
 - debug: msg="{{stdout.stdout_lines}}"
 
 - name: apply nginx ingress to python-hello-world-web
-  shell: kubectl apply -f {{TMPDIR}}/python-hello-world-web-on-nginx-private.yaml
+  shell: kubectl apply -f {{TMPDIR}}/python-hello-world-web-on-nginx-secondary.yaml
   become: yes
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"

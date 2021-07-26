@@ -5,18 +5,18 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: nginx-ingress-private-microk8s-controller
+  name: nginx-ingress-secondary-microk8s-controller
   namespace: ingress
   labels:
-    microk8s-application: nginx-ingress-private-microk8s
+    microk8s-application: nginx-ingress-secondary-microk8s
 spec:
   selector:
     matchLabels:
-      name: nginx-ingress-private-microk8s
+      name: nginx-ingress-secondary-microk8s
   template:
     metadata:
       labels:
-        name: nginx-ingress-private-microk8s
+        name: nginx-ingress-secondary-microk8s
     spec:
       terminationGracePeriodSeconds: 60
       serviceAccountName: nginx-ingress-microk8s-serviceaccount
@@ -78,5 +78,5 @@ spec:
         #- --configmap=$(POD_NAMESPACE)/nginx-load-balancer-microk8s-conf
         #- --tcp-services-configmap=$(POD_NAMESPACE)/nginx-ingress-tcp-microk8s-conf
         #- --udp-services-configmap=$(POD_NAMESPACE)/nginx-ingress-udp-microk8s-conf
-        - --ingress-class=private
+        - --ingress-class=secondary
         - --publish-status-address=127.0.0.1

@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingress-private
+  name: ingress-secondary
   namespace: ingress
 spec:
   selector:
-    name: nginx-ingress-private-microk8s
+    name: nginx-ingress-secondary-microk8s
   type: LoadBalancer
   # loadBalancerIP is optional. MetalLB will automatically allocate an IP 
   # from its pool if not specified. You can also specify one manually.

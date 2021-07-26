@@ -5,7 +5,7 @@ metadata:
   #namespace: default
   annotations:
     # https://github.com/ubuntu/microk8s/issues/2035
-    kubernetes.io/ingress.class: private # 'public' for first
+    kubernetes.io/ingress.class: secondary # 'public' for first
 spec:
   tls:
   - hosts: {{ cert_domains_secondary_ingress | to_json }}

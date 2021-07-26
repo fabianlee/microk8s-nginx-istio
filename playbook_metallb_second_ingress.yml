@@ -11,10 +11,6 @@
   roles:
     - wait-for-microk8s
 
-    # create custom CA and cert for TLS
-    # certs also slurped locally to /tmp
-    - cert-with-ca
-
     # assign MetalLB the use of the additional NIC on microk8s-1
     - metallb-service
 

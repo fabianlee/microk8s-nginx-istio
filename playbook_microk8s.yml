@@ -1,5 +1,6 @@
 ---
 
+# roles run against cluster
 - hosts: microk8s_HA
   gather_facts: yes
   become: yes
@@ -12,6 +13,7 @@
     # GUI utility for kubernetes
     - k9s
 
+# additional roles for post-configuration, run just against single node
 - hosts: microk8s
   gather_facts: no
   become: yes
@@ -23,3 +25,6 @@
     - tiny-tools-all-nodes
     # configure additional IP to be used by MetalLB endpoints
     - additional-netplan-ip
+    # create custom CA and cert for TLS
+    # certs also slurped locally to /tmp
+    - cert-with-ca

@@ -26,7 +26,7 @@
   with_fileglob: "../templates/*.j2"
 
 - name: creates secondary nginx ingress controller, microk8s 'ingress' Add-on already created first one
-  shell: kubectl apply -f {{TMPDIR}}/nginx-ingress-private-microk8s-controller.yaml
+  shell: kubectl apply -f {{TMPDIR}}/nginx-ingress-secondary-microk8s-controller.yaml
   become: yes
   register: stdout
 - debug: msg="{{stdout.stdout_lines}}"
