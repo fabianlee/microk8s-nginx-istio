@@ -42,7 +42,7 @@ spec:
   - hosts:
     -  microk8s-secondary.local
     # secret must be in same namespace
-    secretName: tls-credential
+    secretName: tls-secondary-credential
   rules:
 
   - host: microk8s-secondary.local
