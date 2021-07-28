@@ -1,26 +1,6 @@
 ---
 
-- name: create kubectl config
-  become: yes
-  changed_when: true
-  shell: microk8s config > ~/.kube/config
-  args:
-    executable: /bin/bash
-
-- name: check kubectl
-  become: yes
-  command: kubectl get nodes
-  register: getnodes
-- debug: msg="{{getnodes.stdout_lines}}"
-
-# now done in 'playbook_get_dependencies.yml'
-#- name: install local packages needed for ipaddr jinja2 filter
-#  delegate_to: localhost
-#  apt:
-#    pkg:
-#    - python-netaddr # for ipaddr jinja2 filter used below
-#    state: present
-
+# ipaddr filter enabled in playbook_ansible_dependencies.yml
 - name: find ip address1 for LB
   set_fact:
     metallb_ip1: "{{ additional_nic[0].netplan.addresses[0] | ipaddr('address') }}"
@@ -33,12 +13,13 @@
 - debug: 
     msg: "going to use this bridged IP for a loadbalancer: {{metallb_ip2}}"
 
-- name: Enable metallb with address
+- name: Enable metallb with additional NIC addresses
   become: yes
   command: "microk8s enable metallb {{metallb_ip1}}-{{metallb_ip2}}"
   register: command_result
   changed_when: "'Addon metallb is already enabled' not in command_result.stdout"
 
+# need to allow settling after enabling MetalLB
 - pause:
     seconds: 15
 
@@ -47,18 +28,3 @@
   command: microk8s.status --wait-ready
   retries: 3
   delay: 15
-
-- name: create file out of every jinja2 templates
-  template:
-    src: "{{item}}"
-    dest: "{{TMPDIR}}/{{ item | basename | regex_replace('.j2$', '') }}"
-  with_fileglob: "../templates/*.j2"
-
-- name: apply metalLB service to additional nics added to master microk8s guest
-  shell: kubectl apply -f {{TMPDIR}}/metallb-ingress-service.yaml
-  become: yes
-  register: stdout
-  retries: 3
-  delay: 20
-  until: stdout.rc == 0
-- debug: msg="{{stdout.stdout_lines}}"
