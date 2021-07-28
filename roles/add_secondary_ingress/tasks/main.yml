@@ -32,13 +32,10 @@
 - debug: msg="{{stdout.stdout_lines}}"
 
 - name: apply metalLB service to additional nics added to master microk8s guest
-  shell: kubectl apply -f {{TMPDIR}}/nginx-ingress-service-primary-and-secondary.yaml.j2
+  shell: kubectl apply -f {{TMPDIR}}/nginx-ingress-service-primary-and-secondary.yaml
   become: yes
   register: stdout
   retries: 3
   delay: 20
   until: stdout.rc == 0
 - debug: msg="{{stdout.stdout_lines}}"
-
-
-
