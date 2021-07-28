@@ -23,10 +23,15 @@
     - wait-for-microk8s
     # fetch kubeconfig locally for convenience
     - microk8s-get-kubeconfig-local
+
     # tiny-tools daemonset for troubleshooting
     - tiny-tools-all-nodes
+
     # configure additional IP to be used by MetalLB endpoints
     - additional-netplan-ip
+
     # create custom CA and cert for TLS
     # certs also slurped locally to /tmp
     - cert-with-ca
+    # load secret into default namespace
+    - { role: reapply-tls-secrets, tls_secret_overwrite: true }
