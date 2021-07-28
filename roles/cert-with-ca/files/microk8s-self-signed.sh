@@ -13,7 +13,7 @@ sudo apt-get install libssl1.1 -y
 pushd . > /dev/null
 
 cd /tmp
-for FQDN in microk8s.local microk8s-alt.local;  do 
+for FQDN in microk8s.local microk8s-secondary.local;  do 
 
   # create self-signed cert
   sudo openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
