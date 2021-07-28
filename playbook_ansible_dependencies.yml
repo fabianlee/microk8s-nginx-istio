@@ -41,12 +41,30 @@
         - python-netaddr
         - python3-netaddr
         state: present
+
     # https://galaxy.ansible.com/ansible/netcommon
     - name: get ansible.netcommon collection from ansible galaxy, be patient can take 5 minutes
       command:
         cmd: ansible-galaxy collection install ansible.netcommon:2.2.0 -p .
         creates: "{{playbook_dir}}/../collections/ansible_collections/ansible/netcommon"
         chdir: "{{playbook_dir}}/../collections"
+
+    # sysctl
+    # https://galaxy.ansible.com/ansible/posix
+    - name: get ansible.posix collection from ansible galaxy, be patient can take 5 minutes
+      command:
+        cmd: ansible-galaxy collection install ansible.posix:1.2.1-dev4 -p .
+        creates: "{{playbook_dir}}/../collections/ansible_collections/ansible/posix"
+        chdir: "{{playbook_dir}}/../collections"
+
+    # pam_limits
+    # https://galaxy.ansible.com/community/general
+    - name: get community.general collection from ansible galaxy, be patient can take 5 minutes
+      command:
+        cmd: ansible-galaxy collection install community.general:3.4.0 -p .
+        creates: "{{playbook_dir}}/../collections/ansible_collections/community/general"
+        chdir: "{{playbook_dir}}/../collections"
+
 
 #    - name: update helm repos
 #      community.kubernetes.helm_repository:

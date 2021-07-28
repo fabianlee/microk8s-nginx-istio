@@ -1,5 +1,6 @@
 ---
 
+# 'sysctl' requires ansible.posix collection defined in playbook_ansible_dependencies.yml
 - name: OS swappiness
   sysctl:
     name: vm.swappiness
