@@ -1,0 +1,27 @@
+---
+
+- hosts: microk8s
+  gather_facts: yes
+  become: yes
+
+  # most vars are coming from 'group_vars/' directory
+  vars:
+
+  # these roles only need to be applied to first node in cluster
+  roles:
+    - wait-for-microk8s
+
+    # assign MetalLB the use of the additional NIC on microk8s-1
+    - metallb-service
+
+    # microk8s 'ingress' add-on aleady creates primary nginx ingress controller
+    # Now add a second ingress controller
+    # https://microk8s.io/docs/addon-ingress
+    #
+    # as well as primary and secondary Ingress service
+    - add_secondary_ingress
+
+    # independent deployments on primary and secondary nginx ingress
+    - golang-hello-world-web
+
+
