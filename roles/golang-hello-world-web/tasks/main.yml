@@ -37,14 +37,15 @@
 - debug:
     msg: "total k8s worker node count = {{node_count.stdout}}"
 
-- name: scale golang-hello-world-web to one pod per node
-  shell: kubectl scale --replicas={{node_count.stdout}} deployment/golang-hello-world-web
-  become: yes
-  register: stdout
-  retries: 3
-  delay: 15
-  until: stdout.rc == 0
-- debug: msg="{{stdout.stdout_lines}}"
+# do not scale up deployment, just use 1 instance
+#- name: scale golang-hello-world-web to one pod per node
+#  shell: kubectl scale --replicas={{node_count.stdout}} deployment/golang-hello-world-web
+#  become: yes
+#  register: stdout
+#  retries: 3
+#  delay: 15
+#  until: stdout.rc == 0
+#- debug: msg="{{stdout.stdout_lines}}"
 
 - name: apply deployment /golang-hello-world-web2
   shell: kubectl apply -f {{TMPDIR}}/golang-hello-world-web2.yaml
