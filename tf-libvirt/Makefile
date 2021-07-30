@@ -29,3 +29,14 @@ libvirt-pool:
 ## validate syntax of cloud_init
 validate-cloud-config:
 	cloud-init devel schema --config-file cloud_init.cfg
+
+virsh-create-snapshot:
+	virsh snapshot-create-as microk8s-1-192.168.122.210 --name adv-test --disk-only --diskspec vda,snapshot=internal --diskspec hdd,snapshot=no
+	virsh snapshot-create-as microk8s-2-192.168.122.211 --name adv-test --disk-only --diskspec vda,snapshot=internal --diskspec hdd,snapshot=no
+	virsh snapshot-create-as microk8s-3-192.168.122.212 --name adv-test --disk-only --diskspec vda,snapshot=internal --diskspec hdd,snapshot=no
+
+virsh-snapshot-delete:
+	virsh destroy {microk8s-1-192.168.122.210,microk8s-2-192.168.122.211,microk8s-3-192.168.122.212}
+	virsh snapshot-delete microk8s-1-192.168.122.210 adv-test
+	virsh snapshot-delete microk8s-2-192.168.122.211 adv-test
+	virsh snapshot-delete microk8s-3-192.168.122.212 adv-test
