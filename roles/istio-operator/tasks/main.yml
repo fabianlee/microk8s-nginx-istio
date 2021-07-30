@@ -36,16 +36,23 @@
     mode: u=rwX,g=rX,o=rX
     #mode: o+rwx
 
+- name: create kubectl config for istio
+  become: yes
+  changed_when: true
+  shell: microk8s config -l > {{TMPDIR}}/istio-kubeconfig
+  args:
+    executable: /bin/bash
+
 - name: istio precheck
   become: yes
-  command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl experimental precheck"
+  command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl --kubeconfig {{TMPDIR}}/istio-kubeconfig experimental precheck"
   args:
     creates: istio-precheck.done
   register: precheck
 - debug: msg="{{precheck.stdout_lines}}"
 
 - name: istio operator init
-  command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl operator init --revision {{ istio_version | replace('.','-') }}"
+  command: "{{TMPDIR}}/istio-{{istio_version}}/bin/istioctl --kubeconfig {{TMPDIR}}/istio-kubeconfig operator init --revision {{ istio_version | replace('.','-') }}"
   args: 
     creates: istio-operator-init.done
   register: stdout

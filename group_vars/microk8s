@@ -6,6 +6,15 @@ cert_domains_secondary_ingress: ['microk8s-secondary.local']
 #cert_overwrite: yes
 #tls_secret_overwrite: true
 
+# place in /etc/hosts of each
+local_etc_hosts:
+  - ip: 192.168.122.210
+    fqdn: microk8s-1
+  - ip: 192.168.122.211
+    fqdn: microk8s-2
+  - ip: 192.168.122.212
+    fqdn: microk8s-2
+
 # content that needs to go into netplan of first master
 # these NIC should be peers of the host (e.g. 192.168.1.0/24)
 additional_nic:

@@ -10,6 +10,7 @@
     microk8s_enable_HA: true
 
   roles:
+    # prerequisites and then main microk8s role
     - microk8s-prereq
     - ansible_role_microk8s
     # GUI utility for kubernetes

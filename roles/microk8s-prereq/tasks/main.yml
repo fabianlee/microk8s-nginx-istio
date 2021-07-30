@@ -94,4 +94,8 @@
       set foldlevelstart=20
       set foldmethod=indent
       nnoremap <space> za
-      
+
+- name: add local /etc/hosts entries for all in cluster
+  include_role:
+    name: local-etc-hosts
+    tasks_from: main
