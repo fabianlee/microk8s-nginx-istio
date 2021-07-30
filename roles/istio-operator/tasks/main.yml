@@ -83,13 +83,13 @@
 - debug: msg="{{stdout.stdout_lines}}"
 
 
-- name: wait for 5 istio components to be 'Running'
+- name: wait for 3 istio pods to be 'Running' in istio-system: istiod, gateway, secondary gateway
   shell: kubectl get pods -n istio-system | grep -i Running | wc -l
   become: yes
   register: runningpod_count
   retries: 10 
   delay: 20
-  until: runningpod_count.stdout|int >= 5
+  until: runningpod_count.stdout|int >= 3
 - debug: msg="{{runningpod_count.stdout_lines}}"
 
 
