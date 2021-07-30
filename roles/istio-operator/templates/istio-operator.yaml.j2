@@ -82,8 +82,9 @@ spec:
               patches:
 #                - path: spec.loadBalancerIP
 #                  value: 10.152.183.213
+                # needs to match MetalLB endpoint
                 - path: spec.loadBalancerSourceRanges
-                  value: [ 10.0.0.0/8 ]
+                  value: [ 10.0.0.0/8, 192.0.0.0/8 ]
 
 
       # secondary, independent ingress
@@ -138,8 +139,9 @@ spec:
                   value: {{istio_ingressgateway_secondary_name}}
                 - path: spec.selector.istio
                   value: {{istio_ingressgateway_secondary_selector}}
+                # needs to match MetalLB endpoint
                 - path: spec.loadBalancerSourceRanges
-                  value: [ 10.0.0.0/8 ]
+                  value: [ 10.0.0.0/8, 192.0.0.0/8 ]
 
             
           service:
