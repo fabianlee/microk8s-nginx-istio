@@ -1,0 +1,19 @@
+---
+
+- name: Enable ingress add-on, which is out-of-the-box nginx ingress
+  become: yes
+  command: "microk8s enable ingress"
+  register: command_result
+  changed_when: "'Addon ingress is already enabled' not in command_result.stdout"
+
+# need to allow settling after enabling ingress
+- pause:
+    seconds: 15
+  when: command_result.changed
+
+- name: Wait for microk8s to be ready
+  become: yes
+  command: microk8s.status --wait-ready
+  retries: 3
+  delay: 15
+

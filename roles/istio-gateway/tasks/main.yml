@@ -111,9 +111,9 @@
   register: secondary_clusterIP
 - debug: msg="ClusterIP primary/secondary {{":"}} {{primary_clusterIP.stdout}}/{{secondary_clusterIP.stdout}}"
 
-- command: kubectl get service istio-ingressgateway -n istio-system --output jsonpath='{.status.loadBalancer.ingress[0]}'
+- command: kubectl get service istio-ingressgateway -n istio-system --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
   register: primary_lbIP
-- command: kubectl get service istio-ingressgateway-secondary -n istio-system --output jsonpath='{.status.loadBalancer.ingress[0]}'
+- command: kubectl get service istio-ingressgateway-secondary -n istio-system --output jsonpath='{.status.loadBalancer.ingress[0].ip}'
   register: secondary_lbIP
 - debug: msg="LB primary/secondary {{":"}} {{primary_lbIP.stdout}}/{{secondary_lbIP.stdout}}"
 

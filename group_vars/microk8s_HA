@@ -2,7 +2,7 @@
 microk8s_version: "1.21/stable"
 
 # wait for nginx enablement
-microk8s_plugin_ingress_enable: true
+microk8s_plugin_ingress_enable: false
 
 # on Ubuntu focal, throws error on first run, so skipping
 microk8s_plugin_helm3_enable: false

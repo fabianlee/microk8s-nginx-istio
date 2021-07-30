@@ -14,11 +14,10 @@
     # assign MetalLB the use of the additional NIC on microk8s-1
     - metallb-service
 
-    # microk8s 'ingress' add-on aleady creates primary nginx ingress controller
-    # Now add a second ingress controller
-    # https://microk8s.io/docs/addon-ingress
-    #
+    # microk8s 'ingress' add-on creates primary nginx ingress controller
+    # Add a second ingress controller
     # as well as primary and secondary Ingress service
+    - enable-nginx-ingress-addon
     - add_secondary_nginx_ingress
 
     # independent deployments on primary and secondary nginx ingress
