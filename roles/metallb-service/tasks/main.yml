@@ -22,6 +22,7 @@
 # need to allow settling after enabling MetalLB
 - pause:
     seconds: 15
+  when: command_result.changed
 
 - name: Wait for microk8s to be ready
   become: yes

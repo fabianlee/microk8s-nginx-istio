@@ -82,7 +82,7 @@
   register: runningpod_count
   retries: 10 
   delay: 20
-  until: runningpod_count.stdout >= 5
+  until: runningpod_count.stdout|int >= 5
 - debug: msg="{{runningpod_count.stdout_lines}}"
 
 
