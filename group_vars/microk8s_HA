@@ -18,9 +18,15 @@ users: ['ubuntu'] # 'fabian' for virtualbox, 'ubuntu' for kvm/libvirt
 
 # place in /etc/hosts of each
 local_etc_hosts:
+  # microk8s cluster nodes must see each other
   - ip: 192.168.122.210
     fqdn: microk8s-1
   - ip: 192.168.122.211
     fqdn: microk8s-2
   - ip: 192.168.122.212
     fqdn: microk8s-3
+  # allows curl to MetalLB endpoints with proper host header
+  - ip: 192.168.2.141
+    fqdn: microk8s.local
+  - ip: 192.168.2.142
+    fqdn: microk8s-secondary.local
