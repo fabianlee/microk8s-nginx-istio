@@ -1,8 +1,4 @@
 ---
 
-- name: add entry to /etc/hosts
-  lineinfile:
-    path: /etc/hosts
-    line: "{{ item.ip }}\t{{item.fqdn}}"
-    insertafter: EOF
-  loop: "{{local_etc_hosts}}"
+- name: local etc hosts
+  import_tasks: etc-hosts.yml

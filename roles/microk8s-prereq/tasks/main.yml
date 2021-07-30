@@ -98,4 +98,4 @@
 - name: add local /etc/hosts entries for all in cluster
   include_role:
     name: local-etc-hosts
-    tasks_from: main
+    tasks_from: etc-hosts.yml
