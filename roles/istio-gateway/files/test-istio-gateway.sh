@@ -33,15 +33,7 @@ function call_curl() {
     expectSuccess=0
   fi
 
-  echo "[ $protocol://$domain:$port/page ]"
-
-  # only check cert when trying tls and caller is expecting success
-  if [[ $port -eq 443 && $expectSuccess -eq 0 ]]; then
-    echo | openssl s_client -verify_return_error -servername $domain -connect $gateway:$port -showcerts > /dev/null 2>&1
-    certOK=$?
-    [ $certOK -eq 0 ] || { echo "ERROR: cert error going to $gateway:$port domain $domain"; exit 3; }
-    echo | openssl s_client -verify_return_error -servername $domain -connect $gateway:$port -showcerts 2>/dev/null | grep -E "subject=|issuer="
-  fi
+  echo "[ $protocol://$domain:$port/$page ]"
 
   #set -x
   curl --insecure --fail --resolve $domain:$port:$gateway -x '' $protocol://$domain:$port/$page
