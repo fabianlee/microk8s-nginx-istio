@@ -43,7 +43,7 @@
 
 - name: allow setting after gateawy configs applied
   pause:
-    seconds: 12
+    seconds: 15
 
 - name: apply hello v1 and v2 VirtualService configs that project to Gateway
   shell: kubectl apply -f {{TMPDIR}}/{{ item | basename | regex_replace('\.j2$', '') }}
@@ -57,7 +57,7 @@
 
 - name: allow setting after VirtualService projected to Gateway
   pause:
-    seconds: 12
+    seconds: 20
 
 - name: kubectl to get helloworld service URL
   command: |
