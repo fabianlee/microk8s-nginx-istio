@@ -7,7 +7,7 @@
   # most vars are coming from 'group_vars/' directory
   vars:
     # version needed by more than one role (namespace labels)
-    istio_version: 1.9.7
+    istio_version: 1.9.7 # validated on 1.7.5 and 1.9.7
     istio_ingress_tested_from_localhost: true
 
   # these roles only need to be applied to first node in cluster
