@@ -104,7 +104,7 @@ resource "libvirt_domain" "domain-ubuntu" {
     for_each = index(keys(local.microk8s),each.key)==0 ? [1] : []
     content {
      network_name = "host-bridge"
-     addresses = ["192.168.2.141"]
+     addresses = [var.additional_nic1 ]
     }
   }
   # (secondary ingress) give additional LoadBalancer NIC to first host
@@ -112,7 +112,7 @@ resource "libvirt_domain" "domain-ubuntu" {
     for_each = index(keys(local.microk8s),each.key)==0 ? [1] : []
     content {
      network_name = "host-bridge"
-     addresses = ["192.168.2.142"]
+     addresses = [ var.additional_nic2 ]
     }
   }
 
