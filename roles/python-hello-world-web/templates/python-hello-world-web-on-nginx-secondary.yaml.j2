@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts: {{ cert_domains_secondary_ingress | to_json }}
     # secret must be in same namespace
-    secretName: tls-credential
+    secretName: tls-secondary-credential
   rules:
 
   - host: {{ cert_domains_secondary_ingress | first }}

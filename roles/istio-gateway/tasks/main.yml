@@ -15,25 +15,6 @@
     - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt"
     - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key"
 
-# this is already done in role: 'reapply-tls-secrets'
-#- name: delete tls secret when tls_secret_overwrite set to yes
-#  command: kubectl delete -n istio-system secret tls-credential
-#  become: yes
-#  when: tls_secret_overwrite
-#
-#- name: create tls secret
-#  command: kubectl create -n istio-system secret tls tls-credential --key={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key --cert={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt
-#  become: yes
-#  register: create_result
-#  failed_when: create_result.rc!=0 and not "AlreadyExists" in create_result.stderr
-#- debug: msg="{{create_result.stderr_lines}}"
-#
-#- name: describe tls secret
-#  command: kubectl describe -n istio-system secret tls-credential
-#  become: yes
-#  register: stdout
-#- debug: msg="{{stdout.stdout_lines}}"
-
 - name: copy helloworld manifests to host
   copy:
     src: "{{item}}"

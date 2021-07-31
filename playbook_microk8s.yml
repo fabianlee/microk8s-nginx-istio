@@ -34,5 +34,5 @@
     # create custom CA and cert for TLS
     # certs also slurped locally to /tmp
     - cert-with-ca
-    # load secret into default namespace
-    - { role: reapply-tls-secrets, tls_secret_overwrite: true }
+    # load tls secrets into namespaces
+    - { role: reapply-k8s-tls-secrets, tls_secret_overwrite: true }

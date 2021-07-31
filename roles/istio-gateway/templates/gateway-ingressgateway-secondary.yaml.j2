@@ -18,5 +18,5 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
-      credentialName: tls-credential
+      credentialName: tls-secondary-credential
     hosts: {{ cert_domains_secondary_ingress | to_json }}

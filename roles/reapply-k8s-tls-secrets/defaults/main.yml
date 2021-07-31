@@ -1,2 +1,5 @@
 TMPDIR: "{{ lookup('env','TMPDIR') | default('/tmp',true)  }}"
+
 tls_secret_overwrite: true
+
+secret_namespace_list: [ 'default','nginx-ns','hello-app-ns','istio-system' ]

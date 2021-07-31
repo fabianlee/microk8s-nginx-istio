@@ -100,3 +100,25 @@
   include_role:
     name: local-etc-hosts
     tasks_from: etc-hosts.yml
+
+- name: create microk8s group
+  group:
+    name: microk8s
+    state: present
+
+- name: make sure users are member of microk8s group
+  user:
+    name: "{{ item }}"
+    groups: microk8s
+    append: yes
+  loop: "{{ users }}"
+
+- name: make sure .kube directory is created for user
+  file:
+    state: directory
+    path: /home/{{ item }}/.kube
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0750"
+    recurse: true
+  loop: "{{ users }}"

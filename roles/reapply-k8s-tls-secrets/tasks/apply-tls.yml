@@ -12,26 +12,26 @@
   register: cert_existence
   failed_when: not cert_existence.stat.exists
   loop:
-    - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt"
-    - "{{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key"
+    - "{{TMPDIR}}/{{ cert_domains_list | first }}.crt"
+    - "{{TMPDIR}}/{{ cert_domains_list | first }}.key"
 
 - name: make sure namespace exist
   command: kubectl create ns {{item}}
   register: result
   failed_when: not result.rc in [0,1]
-  loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
+  loop: "{{ secret_namespace_list }}"
 
 - name: delete tls secret when tls_secret_overwrite set to yes
-  command: kubectl delete -n {{item}} secret tls-credential
+  command: kubectl delete -n {{item}} secret {{secret_name}}
   register: result
   failed_when: not result.rc in [0,1]
-  loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
+  loop: "{{ secret_namespace_list }}"
 
-- name: create tls secret
-  command: kubectl create -n {{item}} secret tls tls-credential --key={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.key --cert={{TMPDIR}}/{{ cert_domains_primary_ingress | first }}.crt
+- name: create tls secret {{secret_name}}
+  command: kubectl create -n {{item}} secret tls {{secret_name}} --key={{TMPDIR}}/{{ cert_domains_list | first }}.key --cert={{TMPDIR}}/{{ cert_domains_list | first }}.crt
   become: yes
   register: create_result
-  loop: [ 'default','nginx-ns','hello-app-ns','istio-system']
+  loop: "{{ secret_namespace_list }}"
 
 - debug: msg="ok"
   loop: "{{create_result.results}}"
