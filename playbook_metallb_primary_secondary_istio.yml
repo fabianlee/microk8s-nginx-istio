@@ -17,8 +17,9 @@
     # assign MetalLB the use of the additional NIC on microk8s-1
     - metallb-service
 
-    # istio operator and primary+secondary gateways
+    # istio operator (istio-operator) and primary+secondary ingress gateway services (istio-system)
     - istio-operator
+    # istio gateways (default)
     - istio-gateway
 
     # deploys hello world to primary and secondary
