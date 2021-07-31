@@ -1,4 +1,14 @@
-# microk8s installation with nginx ingress and istio gateway
+# microk8s installation with choice between nginx ingress or istio gateway
+
+blog for microk8s cluster installation
+  https://fabianlee.org/2021/07/25/kubernetes-microk8s-cluster-on-ubuntu-using-ansible/
+
+blog for nginx ingress
+  https://fabianlee.org/2021/07/29/kubernetes-microk8s-with-multiple-metallb-endpoints-and-nginx-ingress-controllers/#ansible_playbook
+
+blog for istio ingress gateways
+  https://fabianlee.org/2021/07/31/kubernetes-microk8s-with-multiple-istio-gateways/
+
 
 Create infrastructure
   * cd tf-libvirt
@@ -6,22 +16,14 @@ Create infrastructure
   * cd ..
 
 Then apply Ansible roles:
+  * ansible-playbook install_dependencies.yml
   * ansible-playbook playbook_microk8s.yml
-  * ansible-playbook playbook_microk8s_postconfig.yml
 
 Validate locally:
   * install k9s (https://github.com/derailed/k9s/releases)
   * export KUBECONFIG=/tmp/microk8s-kubeconfig
   * k9s
 
-Using this ansible role for main installation:
-https://github.com/istvano/ansible_role_microk8s.git
-
-And then additional roles for:
-  * k9s admin
-  * getting kubeconfig to localhost
-  * getting token for kubernetes dashboard
-  * istio-operator installation
 
 
 instead of port forwarding, you can route all traffic to internal 10.152.183.0/24 directly to the VM
