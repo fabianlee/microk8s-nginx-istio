@@ -10,10 +10,16 @@ sudo apt-get install libssl1.0.0 -y
 # newer like Ubuntu20 focal
 sudo apt-get install libssl1.1 -y
 
+certs="$1"
+if [ -z "$certs" ]; then
+  certs="microk8s.local microk8s-secondary.local"
+fi
+echo "going to create certs: $certs"
+
 pushd . > /dev/null
 
 cd /tmp
-for FQDN in microk8s.local microk8s-secondary.local;  do 
+for FQDN in $certs;  do 
 
   # create self-signed cert
   sudo openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
