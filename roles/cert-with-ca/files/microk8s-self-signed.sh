@@ -33,5 +33,7 @@ for FQDN in $certs;  do
   openssl x509 -noout -subject -in $FQDN.crt
 done
 
+sudo chown $USER /tmp/$FQDN.{pem,crt,key}
+
 popd
 
