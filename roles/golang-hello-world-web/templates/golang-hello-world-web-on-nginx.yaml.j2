@@ -6,6 +6,7 @@ metadata:
   annotations:
     # https://github.com/ubuntu/microk8s/issues/2035
     kubernetes.io/ingress.class: public # was 'nginx' before microk8s 1.20
+    nginx.ingress.kubernetes.io/ssl-redirect: "false" 
 spec:
   tls:
   - hosts: {{ cert_domains_primary_ingress | to_json }}

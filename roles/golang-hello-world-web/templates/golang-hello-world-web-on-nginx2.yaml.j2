@@ -7,6 +7,7 @@ metadata:
     # matches ingress-class arg at: 
     #   roles/add_secondary_ingress/templates/nginx-ingress-secondary-microk8s-controller.yaml.j2
     kubernetes.io/ingress.class: secondary
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   tls:
   - hosts: {{ cert_domains_secondary_ingress | to_json }}
