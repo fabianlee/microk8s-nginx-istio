@@ -1,5 +1,8 @@
 # can deploy on single host by overriding HA variable, must use json syntax:
 # ansible-playbook playbook_microk8s.yml --extra-vars '{"microk8s_enable_HA": false}
+#
+# show all vars:
+# ansible -m debug microk8s-1 -a "var=hostvars[inventory_hostname]"
 ---
 
 # roles run against cluster

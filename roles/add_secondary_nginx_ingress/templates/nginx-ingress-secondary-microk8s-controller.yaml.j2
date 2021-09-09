@@ -1,4 +1,9 @@
 ---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ingress
+---
 # https://github.com/ubuntu/microk8s/blob/master/microk8s-resources/actions/ingress.yaml
 # https://kubernetes.github.io/ingress-nginx/user-guide/cli-arguments/
 # 
@@ -75,8 +80,10 @@ spec:
           hostPort: 10264
         args:
         - /nginx-ingress-controller
+        # not required for secondary ingress
         #- --configmap=$(POD_NAMESPACE)/nginx-load-balancer-microk8s-conf
         #- --tcp-services-configmap=$(POD_NAMESPACE)/nginx-ingress-tcp-microk8s-conf
         #- --udp-services-configmap=$(POD_NAMESPACE)/nginx-ingress-udp-microk8s-conf
         - --ingress-class=secondary
+        - ' '
         - --publish-status-address=127.0.0.1
