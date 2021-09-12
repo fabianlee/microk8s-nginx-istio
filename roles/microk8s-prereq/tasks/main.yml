@@ -1,5 +1,15 @@
 ---
 
+- name: disable Ubuntu auto-update
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    group: root
+    mode: 0644
+    content: |
+      APT::Periodic::Update-Package-Lists "0";
+      APT::Periodic::Unattended-Upgrade "0";
+
 # 'sysctl' requires ansible.posix collection defined in playbook_ansible_dependencies.yml
 - name: OS swappiness
   sysctl:
@@ -34,6 +44,10 @@
     state: present
     update_cache: true
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  register: apt_install
+  retries: 3
+  delay: 60
+  until: apt_install is success or ('Unable to acquire the dpkg frontend lock' not in apt_install.msg)
 
 - name: install list of packages, RHEL
   yum:
