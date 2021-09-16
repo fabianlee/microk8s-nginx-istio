@@ -9,6 +9,6 @@ variable "prefixIP" { default = "192.168.122" }
 variable "diskPool" { default = "default" }
 
 # additional nics on microk8s-1
-variable "additional_nic1" { }
-variable "additional_nic2" { }
+variable "additional_nic1" { default="192.168.1.141" }
+variable "additional_nic2" { default="192.168.1.142" }
 
