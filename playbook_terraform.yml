@@ -1,0 +1,9 @@
+---
+
+# create kvm guest vms
+- hosts: localhost
+  gather_facts: yes
+  become: no
+
+  roles:
+     - role: terraform_create_kvm_hosts

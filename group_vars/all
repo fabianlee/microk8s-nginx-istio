@@ -1,3 +1,30 @@
+---
 ansible_python_interpreter: /usr/bin/python3
 
+metal_lb_prefix: 192.168.2
+metal_lb_primary: "{{metal_lb_prefix}}.143"
+metal_lb_secondary: "{{metal_lb_prefix}}.144"
 
+# for SAN certificate with custom CA
+cert_CA: myCA.local
+cert_domains_primary_ingress: ['microk8s.local','microk8s-alt.local']
+cert_domains_secondary_ingress: ['microk8s-secondary.local']
+
+
+# configure these users with proper: group, permissions, ~/.kube/config
+users: ['ubuntu'] # 'fabian' for virtualbox, 'ubuntu' for kvm/libvirt
+
+# place in /etc/hosts of each
+local_etc_hosts:
+  # microk8s cluster nodes must see each other
+  - ip: 192.168.122.210
+    fqdn: microk8s-1
+  - ip: 192.168.122.211
+    fqdn: microk8s-2
+  - ip: 192.168.122.212
+    fqdn: microk8s-3
+  # allows curl to MetalLB endpoints with proper host header
+  - ip: "{{metal_lb_prefix}}.141"
+    fqdn: microk8s.local
+  - ip: "{{metal_lb_prefix}}.142"
+    fqdn: microk8s-secondary.local

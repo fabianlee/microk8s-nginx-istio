@@ -1,34 +1,29 @@
 ---
-# for SAN certificate with custom CA
-cert_CA: myCA.local
-cert_domains_primary_ingress: ['microk8s.local','microk8s-alt.local']
-cert_domains_secondary_ingress: ['microk8s-secondary.local']
-#cert_overwrite: yes
-#tls_secret_overwrite: true
 
 # content that needs to go into netplan of first master
-# these NIC should be peers of the host (e.g. 192.168.1.0/24)
+# these NIC should be peers of the physical host
+# content that needs to go into netplan of first master
+# these NIC should be peers of the physical host
 additional_nic:
   - id: ens4
     netplan:
       addresses:
-      - 192.168.2.141/24
+      - {{metal_lb_primary}}/24
       dhcp4: false
-      gateway4: 192.168.2.1
+      gateway4: {{metal_lb_prefix}}.1
       nameservers:
         addresses:
-        - 192.168.2.1
+        - {{metal_lb_prefix}}.1
         search:
         - home.lab
   - id: ens5
-    netplan: 
+    netplan:
       addresses:
-      - 192.168.2.142/24
+      - {{metal_lb_secondary}}/24
       dhcp4: false
-      gateway4: 192.168.2.1
+      gateway4: {{metal_lb_prefix}}.1
       nameservers:
         addresses:
-        - 192.168.2.1
+        - {{metal_lb_prefix}}.1
         search:
         - home.lab
-
