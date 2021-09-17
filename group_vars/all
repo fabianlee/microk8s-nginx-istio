@@ -2,8 +2,8 @@
 ansible_python_interpreter: /usr/bin/python3
 
 metal_lb_prefix: 192.168.2
-metal_lb_primary: "{{metal_lb_prefix}}.143"
-metal_lb_secondary: "{{metal_lb_prefix}}.144"
+metal_lb_primary: "{{metal_lb_prefix}}.141"
+metal_lb_secondary: "{{metal_lb_prefix}}.142"
 
 # for SAN certificate with custom CA
 cert_CA: myCA.local
